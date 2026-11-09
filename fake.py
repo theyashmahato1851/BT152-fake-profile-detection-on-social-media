@@ -1,149 +1,47 @@
-
-import streamlit as st
-import tensorflow as tf
-from keras.models import Sequential, load_model
-import pandas as pd
-import numpy as np
-import gc
-import json
+"""Run with: streamlit run fake.py"""
+from pathlib import Path
+import json, sqlite3, hashlib, hmac, os, joblib, pandas as pd, streamlit as st
 from PIL import Image
-
-
-
-# Security
-#passlib,hashlib,bcrypt,scrypt
-import hashlib
-def make_hashes(password):
-    return hashlib.sha256(str.encode(password)).hexdigest()
-
-def check_hashes(password,hashed_text):
-    if make_hashes(password) == hashed_text:
-        return hashed_text
-    return False
-# DB Management
-import sqlite3 
-conn = sqlite3.connect('data.db')
-c = conn.cursor()
-# DB  Functions
-def create_usertable():
-    c.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT,password TEXT)')
-
-
-def add_userdata(username,password):
-    c.execute('INSERT INTO userstable(username,password) VALUES (?,?)',(username,password))
-    conn.commit()
-
-def login_user(username,password):
-    c.execute('SELECT * FROM userstable WHERE username =? AND password = ?',(username,password))
-    data = c.fetchall()
-    return data
-
-
-def view_all_users():
-    c.execute('SELECT * FROM userstable')
-    data = c.fetchall()
-    return data
-
-
-    
-
-
-
-
+BASE=Path(__file__).resolve().parent; DB=BASE/'data.db'; MODEL=BASE/'artifacts/fake_profile_model.joblib'; METRICS=BASE/'artifacts/metrics.json'
+def db(): return sqlite3.connect(DB)
+def setup():
+    with db() as c: c.execute('CREATE TABLE IF NOT EXISTS userstable (username TEXT PRIMARY KEY,password TEXT NOT NULL)')
+def hashed(p,s=None):
+    s=s or os.urandom(16).hex(); return f'pbkdf2_sha256${s}$'+hashlib.pbkdf2_hmac('sha256',p.encode(),s.encode(),200000).hex()
+def verify(p,h):
+    if h.startswith('pbkdf2_sha256$'):
+        _,s,_=h.split('$',2); return hmac.compare_digest(hashed(p,s),h)
+    return hmac.compare_digest(hashlib.sha256(p.encode()).hexdigest(),h)
+@st.cache_resource
+def load_model(): return joblib.load(MODEL)
 def main():
-    st.sidebar.subheader("Fake Profile Detection")
-    st.title("Fake Twitter Profile Detection")
-	
-	
-    image = Image.open('G:/Project2020-21/F.jpeg')
-    col1, col2, col3 = st.beta_columns([1,6,1])
-    with col1:
-            st.write("")
-    with col2:
-            st.image(image, width=300)
-    with col3:
-            st.write("")
-			
- 
-    menu = ["Home","Login","SignUp"]
-    choice = st.sidebar.selectbox("Menu",menu)
-    
-    
-
-    if choice == "Home":
-        st.subheader("Fake Profile Detection using Machine Learning")
-
-            
-    elif choice == "Login":
-        st.subheader("Please Enter Valid Credentials")
-
-        username = st.sidebar.text_input("User Name")
-        password = st.sidebar.text_input("Password",type='password')
-        if st.sidebar.checkbox("Login/Logout"):
-            # if password == '12345':
-            create_usertable()
-            hashed_pswd = make_hashes(password)
-            result = login_user(username,check_hashes(password,hashed_pswd))
-            if result:
-                st.success("Logged In as {}".format(username))
-                st.sidebar.success("login Success.")
-                df_user_prediction = pd.DataFrame(columns = ['statuses_count', 'followers_count', 'friends_count',
-                                                                                'favourites_count', 'listed_count', 'url', 'time_zone'])
-                col1, col2 = st.beta_columns([1,1])
-                with st.form(key='my_form'):
-                    sc = col1.number_input("Enter Tweets Count")
-                    fc = col2.text_input("Enter Followers Count")
-                    frc = col1.text_input("Enter Following Count")
-                    frrc = col2.text_input("Enter Favorites Count")
-                    lc = col1.text_input("Listed Count")
-                    submit_button = st.form_submit_button(label='Submit')
-                    if(submit_button):
-                        df_user_prediction.loc[0,"statuses_count"] = int(sc)
-                        df_user_prediction.loc[0,"followers_count"] = int(fc)
-                        df_user_prediction.loc[0,"friends_count"] = int(frc)
-                        df_user_prediction.loc[0,"favourites_count"] = int(frrc)
-                        df_user_prediction.loc[0,"listed_count"] = 52
-                        df_user_prediction.loc[0,"url"] = 2
-                        df_user_prediction.loc[0,"time_zone"] = 2021
-                        df_user_prediction = df_user_prediction.astype(np.float64)
-                        st.write(df_user_prediction)
-                        model = load_model('model_twitter.hdf5')
-                        model.summary()
-                        prediction = model.predict(df_user_prediction)
-                        print ('Prediction:' + str(prediction))
-                        print ('---' * 10)
-                        print (prediction.item(0))
-                        prediction_value = prediction.item(0)
-                        fake = False
-                        if prediction_value == -1.0:
-                            print ('it is -1.0')
-                            st.success("Profile is not Fake.")
-                        if prediction_value != -1.0:
-                            print ('is not -1.0')
-                            st.error("Profile is Fake.")
-
-                        print(fake)
-
-                
-                    
-            else:
-                st.warning("Incorrect Username/Password")
-
-
-
-
-    elif choice == "SignUp":
-        st.subheader("Create New Account")
-        new_user = st.text_input("Username")
-        new_password = st.text_input("Password",type='password')
-
-        if st.button("Signup"):
-            create_usertable()
-            add_userdata(new_user,make_hashes(new_password))
-            st.success("You have successfully created a valid Account")
-            st.info("Go to Login Menu to login")
-
-
-
-if __name__ == '__main__':
-	main()
+    st.set_page_config(page_title='Fake Profile Detection',page_icon='🔎'); setup(); st.title('Fake Twitter/X Profile Detection')
+    if (BASE/'F.jpeg').exists(): st.image(Image.open(BASE/'F.jpeg'),width=420)
+    if not METRICS.exists(): st.warning('Run `python model.py` first.'); st.stop()
+    st.caption(f"Prototype trained on {json.loads(METRICS.read_text())['dataset_size']:,} labelled profiles.")
+    if not st.session_state.get('auth'):
+        a,b=st.tabs(['Sign in','Create account'])
+        with a:
+            with st.form('login'):
+                u=st.text_input('Username'); p=st.text_input('Password',type='password')
+                if st.form_submit_button('Sign in'):
+                    with db() as c: row=c.execute('SELECT password FROM userstable WHERE username=?',(u.strip(),)).fetchone()
+                    if row and verify(p,row[0]): st.session_state.auth=True; st.rerun()
+                    else: st.error('Invalid username or password.')
+        with b:
+            with st.form('signup'):
+                u=st.text_input('New username'); p=st.text_input('New password',type='password')
+                if st.form_submit_button('Create account'):
+                    try:
+                        if len(u.strip())<3 or len(p)<8: raise ValueError('Username needs 3+ characters; password needs 8+.')
+                        with db() as c: c.execute('INSERT INTO userstable VALUES (?,?)',(u.strip(),hashed(p)))
+                        st.success('Account created. Sign in now.')
+                    except (sqlite3.IntegrityError,ValueError) as e: st.error(str(e))
+        return
+    st.subheader('Analyse an account'); st.caption('Screening estimate only—not proof of deception.')
+    with st.form('prediction'):
+        a,b=st.columns(2); v={'statuses_count':a.number_input('Posts / tweets',0,step=1),'followers_count':b.number_input('Followers',0,step=1),'friends_count':a.number_input('Following',0,step=1),'favourites_count':b.number_input('Favourites / likes',0,step=1),'listed_count':a.number_input('Listed count',0,step=1),'has_url':int(b.checkbox('Profile has a URL')),'has_time_zone':int(a.checkbox('Time-zone information is available'))}; run=st.form_submit_button('Check profile',type='primary')
+    if run:
+        prob=float(load_model().predict_proba(pd.DataFrame([v]))[0,1]); st.metric('Estimated probability of a fake profile',f'{prob:.1%}')
+        (st.error if prob>=.5 else st.success)('Potentially fake: review manually.' if prob>=.5 else 'Likely genuine according to this model; not a guarantee.')
+if __name__=='__main__': main()

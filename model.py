@@ -1,172 +1,22 @@
-import pandas as pd
-import numpy as np
+"""Train classifier: python model.py."""
+from pathlib import Path
+import json, joblib, pandas as pd
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
-from keras.models import Sequential
-from keras.optimizers import SGD
-from keras.layers import Dense, BatchNormalization, Activation, Dropout
-from keras.callbacks import EarlyStopping, Callback
-from matplotlib import pyplot as plt
-import matplotlib.pyplot as plt
-from keras.models import load_model
-from IPython.display import clear_output
-
-user_object = dict()
-
-user_object["fake"] = pd.read_csv("Dataset/fake_twitter_accounts.csv")
-user_object["legit"] = pd.read_csv("Dataset/real_twitter_accounts.csv")
-
-user_object["legit"] = user_object["legit"].drop(
-    ["id", "name", "screen_name", "created_at", "lang", "location", "default_profile", "default_profile_image",
-     "geo_enabled", "profile_image_url", "profile_banner_url", "profile_use_background_image",
-     "profile_background_image_url_https", "profile_text_color", "profile_image_url_https",
-     "profile_sidebar_border_color", "profile_background_tile", "profile_sidebar_fill_color",
-     "profile_background_image_url", "profile_background_color", "profile_link_color", "utc_offset", "protected",
-     "verified", "dataset", "updated", "description"], axis=1)
-
-user_object["fake"] = user_object["fake"].drop(
-    ["id", "name", "screen_name", "created_at", "lang", "location", "default_profile", "default_profile_image",
-     "geo_enabled", "profile_image_url", "profile_banner_url", "profile_use_background_image",
-     "profile_background_image_url_https", "profile_text_color", "profile_image_url_https",
-     "profile_sidebar_border_color", "profile_background_tile", "profile_sidebar_fill_color",
-     "profile_background_image_url", "profile_background_color", "profile_link_color", "utc_offset", "protected",
-     "verified", "dataset", "updated", "description"], axis=1)
-
-user_object["legit"] = user_object["legit"].values
-user_object["fake"] = user_object["fake"].values
-
-for index in range(len(user_object["legit"])):
-    if type(user_object["legit"][index][5]) == str:
-        user_object["legit"][index][5] = 1
-
-    if type(user_object["legit"][index][6]) == str:
-        user_object["legit"][index][6] = 1
-
-for index in range(len(user_object["fake"])):
-    if type(user_object["fake"][index][5]) == str:
-        user_object["fake"][index][5] = 1
-
-    if type(user_object["fake"][index][6]) == str:
-        user_object["fake"][index][6] = 1
-
-user_object["legit"] = user_object["legit"].astype(np.float64)
-user_object["fake"] = user_object["fake"].astype(np.float64)
-
-where_nans = np.isnan(user_object["legit"])
-user_object["legit"][where_nans] = 0
-
-where_nans = np.isnan(user_object["fake"])
-user_object["fake"][where_nans] = 0
-
-X = np.zeros((len(user_object["fake"]) + len(user_object["legit"]), 7))
-Y = np.zeros(len(user_object["fake"]) + len(user_object["legit"]))
-
-for index in range(len(user_object["legit"])):
-    X[index] = user_object["legit"][index] / max(user_object["legit"][index])
-    Y[index] = -1
-
-for index in range(len(user_object["fake"])):
-    bound = max(user_object["fake"][index])
-    if bound == 0:
-        bound = 1
-
-    X[len(user_object["legit"]) + index] = user_object["fake"][index] / bound  # Normalizing Data [0 <--> 1]
-    Y[len(user_object["legit"]) + index] = 1
-
-X_train_data, X_test_data, y_train_data, y_test_data = train_test_split(X, Y,
-                                                                        test_size=0.24, random_state=42)
-
-early_stopping = EarlyStopping(monitor='val_loss', patience=2)
-
-
-class PlotLearning(Callback):
-    def on_train_begin(self, logs={}):
-        self.i = 0
-        self.x = []
-        self.losses = []
-        self.val_losses = []
-        self.acc = []
-        self.val_acc = []
-        self.fig = plt.figure()
-
-        self.logs = []
-
-    def on_epoch_end(self, epoch, logs={}):
-        self.logs.append(logs)
-        self.x.append(self.i)
-        self.losses.append(logs.get('loss'))
-        self.val_losses.append(logs.get('val_loss'))
-        self.acc.append(logs.get('acc'))
-        self.val_acc.append(logs.get('val_acc'))
-        self.i += 1
-        f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
-
-        clear_output(wait=True)
-
-        ax1.set_yscale('Log')
-        ax1.plot(self.x, self.losses, label="loss")
-        ax1.plot(self.x, self.val_losses, label="val_loss")
-        ax1.legend()
-
-        ax2.plot(self.x, self.acc, label="accuracy")
-        ax2.plot(self.x, self.val_acc, label="validation accuracy")
-        ax2.legend()
-
-        plt.show();
-
-
-plot = PlotLearning()
-
-model = Sequential([
-    BatchNormalization(),
-
-    Dense(16, activation="relu", kernel_regularizer="l2"),
-    BatchNormalization(),
-    Dense(8, activation="relu", kernel_regularizer="l2"),
-    BatchNormalization(),
-    Dense(1, activation="tanh"),
-])
-
-model.build((None, X.shape[1]))
-model.summary()
-model.compile(
-    optimizer="adadelta",
-    loss="binary_crossentropy",
-    metrics=["acc"]
-)
-
-model.fit(X_train_data, y_train_data, epochs=2000, validation_data=(X_test_data, y_test_data), shuffle=True,
-          batch_size=100,
-          callbacks=[early_stopping, plot])
-
-prediction = model.predict(X_test_data).T[0]
-
-for index in range(len(prediction)):
-    prediction[index] = -1 if prediction[index] < 0 else 1
-
-
-def plot_confusion_matrix(cm, title='CONFUSION MATRIX', cmap=plt.cm.Reds):
-    target_names = ['Fake', 'Real']
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(target_names))
-    plt.xticks(tick_marks, target_names, rotation=45)
-    plt.yticks(tick_marks, target_names)
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-
-
-mat = confusion_matrix(y_test_data, prediction)
-print(mat)
-
-plot_confusion_matrix(mat)
-
-_, train_accuracy = model.evaluate(X_train_data, y_train_data)
-_, validation_accuracy = model.evaluate(X_test_data, y_test_data)
-print("Train Accuracy:", train_accuracy)
-print("Validation Accuracy:", validation_accuracy)
-
-model.save('dataset/model_twitter.hdf5')
-frozen_model = load_model("dataset/model_twitter.hdf5")
+from sklearn.pipeline import Pipeline
+BASE=Path(__file__).resolve().parent; ART=BASE/'artifacts'
+FIELDS=['statuses_count','followers_count','friends_count','favourites_count','listed_count']; FEATURES=FIELDS+['has_url','has_time_zone']
+def prepare(path,label):
+ raw=pd.read_csv(path); data=raw[FIELDS].apply(pd.to_numeric,errors='coerce'); present=lambda x:(~x.fillna('').astype(str).str.strip().str.lower().isin(['','nan','none','null'])).astype(int)
+ data['has_url']=present(raw['url']); data['has_time_zone']=present(raw['time_zone']); data['label']=label; return data
+def train():
+ data=pd.concat([prepare(BASE/'real_twitter_accounts.csv',0),prepare(BASE/'fake_twitter_accounts.csv',1)],ignore_index=True)
+ xt,xv,yt,yv=train_test_split(data[FEATURES],data.label,test_size=.25,random_state=42,stratify=data.label)
+ pipe=Pipeline([('preprocessor',ColumnTransformer([('numeric',SimpleImputer(strategy='median'),FEATURES)])),('classifier',RandomForestClassifier(n_estimators=300,min_samples_leaf=2,class_weight='balanced',random_state=42,n_jobs=-1))])
+ pipe.fit(xt,yt); p=pipe.predict(xv); ART.mkdir(exist_ok=True); joblib.dump(pipe,ART/'fake_profile_model.joblib')
+ metrics={'dataset_size':len(data),'real_profiles':int((data.label==0).sum()),'fake_profiles':int((data.label==1).sum()),'test_size':len(xv),'accuracy':round(float(accuracy_score(yv,p)),4),'confusion_matrix':confusion_matrix(yv,p,labels=[0,1]).tolist(),'labels':{'0':'real','1':'fake'},'features':FEATURES,'random_state':42}
+ (ART/'metrics.json').write_text(json.dumps(metrics,indent=2)); print(f"Saved model. Test accuracy: {metrics['accuracy']:.2%}"); print(metrics['confusion_matrix'])
+if __name__=='__main__': train()

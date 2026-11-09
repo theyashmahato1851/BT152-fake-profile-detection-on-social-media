@@ -1,2 +1,28 @@
-# Detection-Of-Fake-Profile-In-Online-Social-Networking-Using-Machine-Learning.
-Social media sites are used on a regular basis in today’s world and have become an integral part of our lives. It is one of the main means of communication and has become a tool for both spammers and scammers. Such social media platforms have changed drastically how we live our social life. It has become easier to make new friends, keep in touch with them, and know their updates. But many problems, such as fake profiles and online impersonation, have also grown with the rapid growth of social media. This project presents a machine learning(Neural Network) method for detecting fake accounts in social media. In this work a study is carried out of different research papers and provides a comparative study of existing work done. Fake accounts are mostly used by intruders to perform malicious activities such as personal identity harm, theft, and privacy intrusion on social media platforms. Hence identifying an account is either real or fake is one of the key issues.
+# Fake Twitter/X Profile Detection
+
+An academic ML prototype that estimates fake-profile risk from public Twitter/X account metadata. It includes a Streamlit interface, local sign-in, reproducible training, and evaluation output.
+
+## Dataset and method
+
+The included data contains 1,481 real and 1,337 fake labelled profiles. The model uses tweet count, followers, following, favourites, listed count, URL presence, and time-zone presence. Labels are `0 = real`, `1 = fake`.
+
+`model.py` makes a stratified 75/25 train-test split (`random_state=42`) and trains a Random Forest in a scikit-learn pipeline. The same preprocessing runs during training and prediction, preventing mismatched inputs. It writes the trained model and metrics to `artifacts/`.
+
+## Run on Windows
+
+Install **Python 3.11 or 3.12** and tick **Add Python to PATH**. In Command Prompt, open this project folder and run:
+
+```bat
+py -3.12 -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python model.py
+streamlit run fake.py
+```
+
+Create an account, sign in, and enter public account statistics. The result is only a screening signal—not evidence to accuse, report, or ban a person.
+
+## Limitations and future work
+
+The data is historical and may contain bias or label errors. Metadata cannot establish identity or intent, so human review is essential. Future work: compare classifiers with precision/recall/F1/ROC-AUC, add model explainability, collect newer data, add tests and GitHub Actions, and deploy with Streamlit Community Cloud or Render.
