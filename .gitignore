@@ -3,3 +3,5 @@ __pycache__/
 data.db
 artifacts/
 .streamlit/secrets.toml
+*.pyc
+*_ORIGINAL.py
