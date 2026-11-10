@@ -54,6 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function getPlatformLogoHtml(platform, size = 24) {
+    const p = (platform || '').toLowerCase();
+    if (p.includes('instagram')) {
+      return `<img src="/static/assets/instagram.png" alt="Instagram" class="platform-logo-img" style="width:${size}px; height:${size}px;">`;
+    } else if (p.includes('facebook')) {
+      return `<img src="/static/assets/facebook.png" alt="Facebook" class="platform-logo-img" style="width:${size}px; height:${size}px;">`;
+    } else {
+      return `<img src="/static/assets/x.svg" alt="X" class="platform-logo-img" style="width:${size}px; height:${size}px;">`;
+    }
+  }
+
   function renderPresets(presets) {
     presetsContainer.innerHTML = '';
     const filtered = currentPlatform === 'ALL' 
@@ -63,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     filtered.forEach(p => {
       const card = document.createElement('div');
       card.className = 'preset-card';
-      const icon = p.platform === 'X' ? '𝕏' : (p.platform === 'Instagram' ? '📸' : '📘');
+      const iconHtml = getPlatformLogoHtml(p.platform, 26);
       const badgeCls = p.is_bot ? 'badge-bot' : 'badge-real';
 
       card.innerHTML = `
         <div class="preset-left">
-          <span class="preset-icon">${icon}</span>
+          <span class="preset-icon">${iconHtml}</span>
           <div>
             <div class="preset-name">${p.name}</div>
             <div class="preset-platform">${p.platform} · ${p.handle}</div>
@@ -103,13 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateDetectedIcon(val) {
     const v = val.toLowerCase();
     if (v.includes('instagram.com') || v.includes('instagr.am')) {
-      detectedIcon.textContent = '📸';
+      detectedIcon.innerHTML = '<img src="/static/assets/instagram.png" alt="Instagram" class="search-logo-img">';
     } else if (v.includes('facebook.com') || v.includes('fb.com')) {
-      detectedIcon.textContent = '📘';
+      detectedIcon.innerHTML = '<img src="/static/assets/facebook.png" alt="Facebook" class="search-logo-img">';
     } else if (v.includes('x.com') || v.includes('twitter.com')) {
-      detectedIcon.textContent = '𝕏';
+      detectedIcon.innerHTML = '<img src="/static/assets/x.svg" alt="X" class="search-logo-img">';
     } else {
-      detectedIcon.textContent = '🔍';
+      detectedIcon.innerHTML = '🔍';
     }
   }
 
@@ -176,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentFeatures = { ...f };
 
     // Target summary
-    resIcon.textContent = t.platform === 'X' ? '𝕏' : (t.platform === 'Instagram' ? '📸' : '📘');
+    resIcon.innerHTML = getPlatformLogoHtml(t.platform, 38);
     resHandle.textContent = t.handle;
     resPlatform.textContent = `Platform: ${t.platform}`;
     resQuickStats.innerHTML = `

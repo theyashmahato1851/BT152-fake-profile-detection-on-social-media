@@ -22,6 +22,8 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 
+import base64
+
 # ---------------------------------------------------------------------------
 # Base Paths & Artifacts
 # ---------------------------------------------------------------------------
@@ -31,6 +33,14 @@ MODEL_PATH = BASE / "artifacts" / "fake_profile_model.joblib"
 METRICS_PATH = BASE / "artifacts" / "metrics.json"
 IMPORTANCE_PATH = BASE / "artifacts" / "feature_importance.json"
 BANNER_PATH = BASE / "F.jpeg"
+FB_LOGO_PATH = BASE / "frontend" / "assets" / "facebook.png"
+IG_LOGO_PATH = BASE / "frontend" / "assets" / "instagram.png"
+X_LOGO_PATH = BASE / "frontend" / "assets" / "x.svg"
+
+def _get_img_b64(path: Path, mime: str = "image/png") -> str:
+    if path.exists():
+        return f"data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()}"
+    return ""
 
 # ---------------------------------------------------------------------------
 # Verified Multi-Platform Presets (Direct from the 3,000 Profile Dataset)
@@ -693,13 +703,17 @@ def _render_scanner():
         unsafe_allow_html=True,
     )
 
+    fb_b64 = _get_img_b64(FB_LOGO_PATH)
+    ig_b64 = _get_img_b64(IG_LOGO_PATH)
+    x_b64 = _get_img_b64(X_LOGO_PATH, mime="image/svg+xml")
+
     # Platform Chips Strip
     st.markdown(
-        """
+        f"""
         <div style="margin-bottom: 16px;">
-            <span class="platform-chip chip-x">𝕏 X (Twitter)</span>
-            <span class="platform-chip chip-ig">📸 Instagram</span>
-            <span class="platform-chip chip-fb">📘 Facebook</span>
+            <span class="platform-chip chip-x"><img src="{x_b64}" style="width:16px;vertical-align:middle;margin-right:6px;"> X (Twitter)</span>
+            <span class="platform-chip chip-ig"><img src="{ig_b64}" style="width:16px;vertical-align:middle;margin-right:6px;border-radius:3px;"> Instagram</span>
+            <span class="platform-chip chip-fb"><img src="{fb_b64}" style="width:16px;vertical-align:middle;margin-right:6px;border-radius:3px;"> Facebook</span>
         </div>
         """,
         unsafe_allow_html=True,
