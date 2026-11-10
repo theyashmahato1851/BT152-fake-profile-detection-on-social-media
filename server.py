@@ -428,7 +428,7 @@ def build_ml_features(profile: dict) -> dict:
         return {
             "platform": platform,
             "username": raw_user,
-            "username_length": u_len,
+            "username_length": min(u_len, 7),
             "digits_count": 0,
             "digit_ratio": 0.0,
             "special_char_count": 0,

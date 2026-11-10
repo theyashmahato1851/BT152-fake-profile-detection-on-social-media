@@ -1,147 +1,96 @@
-/* ==========================================================================
-   ProfileSentinel — Notion & Night Shift Design System Stylesheet
-   ========================================================================== */
+/* 
+ProfileTrust — Clean, Accessible, Universal Stylesheet
+*/
 
-/* Anti-aliased SVG spline rendering */
-.curve-path {
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease;
+:root {
+  color-scheme: light dark;
 }
 
-.curve-area {
-  transition: d 0.5s cubic-bezier(0.4, 0, 0.2, 1), fill 0.3s ease;
-}
-
-/* Subtle dot grid pattern */
-.bg-grid-pattern {
-  background-size: 24px 24px;
-  background-image: radial-gradient(rgba(120, 130, 150, 0.12) 1px, transparent 1px);
-}
-
-.dark .bg-grid-pattern {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-}
-
-/* Glowing Circuit Nodes */
-.circuit-node {
-  animation: pulse-node 3s infinite ease-in-out;
-}
-
-@keyframes pulse-node {
-  0%, 100% {
-    transform: scale(0.9);
-    filter: drop-shadow(0 0 4px currentColor);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.3);
-    filter: drop-shadow(0 0 10px currentColor);
-    opacity: 1;
-  }
-}
-
-/* Hide scrollbars cleanly */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Strict Brand Icon Classes for Facebook, Instagram, X */
+/* Strict Image Sizing Constraints to prevent any stretched or giant images */
 img {
   max-width: 100%;
   height: auto;
 }
 
-.icon-chip {
-  width: 16px;
-  height: 16px;
-  max-width: 16px;
-  max-height: 16px;
-  object-fit: contain;
-  vertical-align: middle;
-  border-radius: 3px;
-  display: inline-block;
-  flex-shrink: 0;
+.platform-icon-img {
+  width: 18px !important;
+  height: 18px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
 }
 
-.icon-inline {
-  width: 16px;
-  height: 16px;
-  max-width: 16px;
-  max-height: 16px;
-  object-fit: contain;
-  vertical-align: -2.5px;
-  margin-right: 7px;
-  border-radius: 3px;
-  display: inline-block;
-  flex-shrink: 0;
+/* Radar Animation for Live Scan */
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.icon-search {
-  width: 20px;
-  height: 20px;
-  max-width: 20px;
-  max-height: 20px;
-  object-fit: contain;
-  display: inline-block;
-  vertical-align: middle;
+.radar-sweep-effect {
+  animation: radar-sweep 2s linear infinite;
+}
+
+/* Circular Gauge Animation */
+#gaugeProgressCircle {
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease;
+}
+
+/* Status colors and soft backgrounds */
+.status-good {
+  background-color: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #10B981;
+}
+
+.status-warning {
+  background-color: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: #F59E0B;
+}
+
+.status-bad {
+  background-color: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #EF4444;
+}
+
+/* Dark mode factor card adjustments */
+.dark .factor-card-good {
+  background-color: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.dark .factor-card-warning {
+  background-color: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.dark .factor-card-bad {
+  background-color: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Smooth transitions for theme toggle */
+body {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
   border-radius: 4px;
-  flex-shrink: 0;
 }
-
-.icon-target {
-  width: 32px;
-  height: 32px;
-  max-width: 32px;
-  max-height: 32px;
-  object-fit: contain;
-  display: block;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-.x-glyph {
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1;
-  display: inline-block;
-}
-
-/* Diagnostic Row Item */
-.diagnostic-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(228, 225, 218, 0.8);
-  font-size: 12px;
-  transition: all 0.2s ease;
-}
-
-.dark .diagnostic-item {
-  background: rgba(11, 18, 44, 0.4);
-  border-color: rgba(30, 41, 75, 0.7);
-}
-
-.diagnostic-item:hover {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.dark .diagnostic-item:hover {
-  background: rgba(17, 24, 54, 0.7);
-}
-
-/* Card hover lift */
-.hover-lift {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-3px);
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.6);
 }

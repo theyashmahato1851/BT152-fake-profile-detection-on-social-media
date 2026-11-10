@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProfileSentinel — ML Behavioral Metadata & Profile Analysis</title>
-  
+  <title>ProfileTrust — Simple & Accurate Social Media Fake Profile Detector</title>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Editorial Google Fonts: Instrument Serif + Plus Jakarta Sans + JetBrains Mono -->
+
+  <!-- Clean, highly readable Google Fonts: Plus Jakarta Sans + Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -20,37 +20,16 @@
         extend: {
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', '-apple-system', 'sans-serif'],
-            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            paper: {
-              50: '#FDFDFC',
-              100: '#F9F8F6',
-              200: '#F1EFEA',
-              300: '#E4E1DA',
-              400: '#B8B3A8',
-              800: '#34322E',
-              900: '#1F1E1B',
-            },
-            obsidian: {
-              950: '#04060F',
-              900: '#0B122C',
-              850: '#111836',
-              800: '#1E294B',
-              750: '#28355E',
-              700: '#374675',
-              600: '#4F6196',
-            },
-            sentinel: {
-              crimson: '#E13D45',
-              crimsonSoft: '#FEE2E2',
-              amber: '#E58E26',
-              amberSoft: '#FEF3C7',
-              emerald: '#10B981',
-              emeraldSoft: '#D1FAE5',
-              cyan: '#06B6D4',
-              indigo: '#6366F1',
+            brand: {
+              50: '#F0FDF4',
+              500: '#10B981',
+              600: '#059669',
+              dark: '#0B0F19',
+              cardDark: '#111827',
+              borderDark: '#1F2937',
             }
           }
         }
@@ -60,797 +39,389 @@
 
   <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-paper-100 dark:bg-obsidian-950 text-paper-900 dark:text-zinc-100 min-h-screen font-sans antialiased transition-colors duration-300 flex flex-col justify-between selection:bg-sentinel-crimson selection:text-white">
+<body class="bg-gray-50 dark:bg-brand-dark text-gray-900 dark:text-gray-100 min-h-screen font-sans antialiased transition-colors duration-200 flex flex-col justify-between">
 
-  <!-- Ambient Glowing Circuit Pathways (Night Shift Background Layer) -->
-  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-60 dark:opacity-75">
-    <!-- Top Radial Spotlight Glow -->
-    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-gradient-to-b from-indigo-500/20 via-sky-500/10 to-transparent rounded-full blur-3xl"></div>
-    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-b from-sentinel-crimson/15 via-purple-500/10 to-transparent rounded-full blur-2xl"></div>
+  <!-- Main Container -->
+  <div class="w-full flex-1 flex flex-col">
 
-    <!-- Glowing SVG Circuit Tracks -->
-    <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="circuit-glow-1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#6366F1" stop-opacity="0.3" />
-          <stop offset="50%" stop-color="#06B6D4" stop-opacity="0.6" />
-          <stop offset="100%" stop-color="#E13D45" stop-opacity="0.2" />
-        </linearGradient>
-        <linearGradient id="circuit-glow-2" x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#10B981" stop-opacity="0.4" />
-          <stop offset="70%" stop-color="#6366F1" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="#04060F" stop-opacity="0" />
-        </linearGradient>
-      </defs>
-
-      <!-- Pathway Line 1 -->
-      <path d="M -100 120 C 300 120, 450 300, 750 280 S 1200 450, 1600 420" fill="none" stroke="url(#circuit-glow-1)" stroke-width="1.5" stroke-dasharray="8 6" class="animate-pulse" />
-      
-      <!-- Pathway Line 2 -->
-      <path d="M 100 -50 C 200 250, 600 220, 850 480 S 1400 520, 1800 650" fill="none" stroke="url(#circuit-glow-2)" stroke-width="1.2" />
-
-      <!-- Glowing Circuit Nodes -->
-      <circle cx="450" cy="300" r="4" fill="#06B6D4" class="circuit-node shadow-cyan-400" />
-      <circle cx="750" cy="280" r="3.5" fill="#E13D45" class="circuit-node shadow-red-400" />
-      <circle cx="850" cy="480" r="4" fill="#10B981" class="circuit-node shadow-emerald-400" />
-    </svg>
-  </div>
-
-  <!-- Top Global Header / Utilities -->
-  <header class="relative z-20 max-w-[1400px] w-full mx-auto pt-4 px-4 md:px-8">
-    <div class="flex items-center justify-between py-2 border-b border-paper-200/80 dark:border-obsidian-800/80">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sentinel-crimson to-indigo-600 flex items-center justify-center text-white shadow-md shadow-red-500/20">
-          <span class="text-lg">🛡️</span>
-        </div>
-        <div>
-          <h1 class="text-sm font-bold tracking-tight flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-            ProfileSentinel
-            <span class="font-serif italic font-normal text-zinc-500 dark:text-zinc-400 text-xs">Behavioral Forensics v2.5 PRO</span>
-          </h1>
-          <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">Continuous Cadence Spline Inference Engine</p>
-        </div>
-      </div>
-
-      <!-- Right Utility Pills -->
-      <div class="flex items-center gap-2.5">
-        <div class="hidden lg:flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono px-3 py-1 rounded-full bg-paper-200/60 dark:bg-obsidian-900/80 border border-paper-300 dark:border-obsidian-800">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>AI Engine Online (3,000 Profiles)</span>
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-gray-200 dark:border-brand-borderDark bg-white/80 dark:bg-brand-cardDark/80 backdrop-blur sticky top-0 z-40">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 text-xl shadow-sm">
+            🛡️
+          </div>
+          <div>
+            <h1 class="text-base font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
+              ProfileTrust
+              <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/25">AI Verifier</span>
+            </h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Social Media Authenticity & Bot Detection</p>
+          </div>
         </div>
 
-        <!-- Theme Toggle Pill -->
-        <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-lg border border-paper-300 dark:border-obsidian-750 bg-white/80 dark:bg-obsidian-850 text-xs font-medium flex items-center gap-1.5 hover:border-zinc-400 dark:hover:border-obsidian-600 transition-colors shadow-sm">
-          <span id="theme-icon" class="text-xs">☀️</span>
-          <span id="theme-label" class="hidden sm:inline text-[11px] font-mono">Notion Light</span>
-        </button>
-
-        <!-- Design Token Inspector -->
-        <button onclick="toggleTokens()" class="px-3 py-1.5 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-medium hover:opacity-90 transition-opacity shadow-sm">
-          Inspect Tokens
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section: Notion Night Shift Campaign Style -->
-  <section class="relative z-10 max-w-[1100px] w-full mx-auto pt-10 pb-6 px-4 text-center">
-    <!-- Campaign Pill Badge -->
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/70 dark:bg-obsidian-850/80 border border-paper-300 dark:border-obsidian-750 text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-5 shadow-sm backdrop-blur-md">
-      <span class="w-2 h-2 rounded-full bg-sentinel-cyan animate-ping"></span>
-      <span class="font-mono text-[11px] tracking-wide uppercase text-sentinel-cyan">Meet the Night Shift</span>
-      <span class="text-zinc-400">|</span>
-      <span>Autonomous Sybil & Behavioral Auditing</span>
-    </div>
-
-    <!-- Editorial Calligraphic Headline -->
-    <h2 class="text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-zinc-900 dark:text-white leading-[1.15] mb-4">
-      Audit social accounts with <br class="hidden sm:inline">
-      <span class="font-serif italic font-normal bg-gradient-to-r from-sentinel-crimson via-purple-400 to-sky-400 bg-clip-text text-transparent">behavioral metadata</span> intelligence.
-    </h2>
-
-    <p class="max-w-2xl mx-auto text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">
-      Identify coordinated bot networks, impersonation clones, and sybil farms across 
-      <b>X</b>, <b>Instagram</b>, and <b>Facebook</b> using continuous circadian cadence splines and a 400-estimator ensemble pipeline.
-    </p>
-
-    <!-- Universal Search Bar Experience -->
-    <div class="max-w-3xl mx-auto mb-5">
-      <form id="scan-form" class="relative group">
-        <div class="flex items-center bg-white dark:bg-obsidian-900 border-2 border-paper-300 dark:border-obsidian-750 rounded-2xl p-1.5 sm:p-2 shadow-xl shadow-black/5 dark:shadow-black/40 focus-within:border-sentinel-indigo focus-within:ring-4 focus-within:ring-sentinel-indigo/15 transition-all">
-          
-          <!-- Auto-detected Platform Icon Container -->
-          <div id="detected-icon-box" class="w-10 h-10 rounded-xl bg-paper-100 dark:bg-obsidian-800 flex items-center justify-center text-lg shrink-0 ml-1">
-            <span id="detected-icon">🔍</span>
+        <!-- Platform Badges & Theme Toggle -->
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/60 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700">
+            <span class="flex items-center gap-1.5">
+              <img src="/static/assets/instagram.png" alt="Instagram" class="w-4 h-4 object-contain inline-block"> Instagram
+            </span>
+            <span class="text-gray-300 dark:text-gray-600">•</span>
+            <span class="flex items-center gap-1.5">
+              <img src="/static/assets/x.svg" alt="X" class="w-3.5 h-3.5 object-contain inline-block"> X / Twitter
+            </span>
+            <span class="text-gray-300 dark:text-gray-600">•</span>
+            <span class="flex items-center gap-1.5">
+              <img src="/static/assets/facebook.png" alt="Facebook" class="w-4 h-4 object-contain inline-block"> Facebook
+            </span>
           </div>
 
-          <!-- URL Input Box -->
+          <!-- Theme Toggle Button -->
+          <button id="themeToggleBtn" aria-label="Toggle theme" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+            <span id="themeIcon">☀️</span>
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-1 flex flex-col gap-8">
+
+      <!-- Hero Introduction -->
+      <section class="text-center max-w-2xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+          Find out if a social media account is <span class="text-emerald-500">Real</span> or <span class="text-rose-500">Fake</span>.
+        </h2>
+        <p class="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+          Paste any profile link or username. Our AI analyzes the profile picture, follower balance, bio, and activity history to give you a clear, easy-to-read trust score.
+        </p>
+      </section>
+
+      <!-- URL Input & Search Bar -->
+      <section class="w-full">
+        <form id="scanForm" class="relative flex flex-col sm:flex-row items-center gap-2.5 p-2 rounded-2xl bg-white dark:bg-brand-cardDark border-2 border-gray-200 dark:border-brand-borderDark shadow-lg shadow-gray-200/50 dark:shadow-black/40 focus-within:border-emerald-500 dark:focus-within:border-emerald-500 transition">
+          
+          <!-- Leading Platform Icon (Dynamically updates) -->
+          <div class="hidden sm:flex items-center pl-3 text-gray-400">
+            <div id="inputPlatformBadge" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+              <span id="inputPlatformIcon" class="text-base">🌐</span>
+            </div>
+          </div>
+
+          <!-- Main Input Field -->
           <input 
             type="text" 
-            id="url-input" 
-            placeholder="Paste target profile URL or handle (e.g., https://x.com/ShadowProfile, https://instagram.com/ElenaRostova)"
-            class="w-full bg-transparent border-none outline-none px-3.5 py-2 text-sm sm:text-base text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 font-sans"
-            value="https://x.com/ShadowProfile"
-            autocomplete="off"
+            id="urlInput" 
+            placeholder="Paste profile link (e.g. instagram.com/cristiano, @elonmusk, fb.com/zuck)" 
+            autocomplete="off" 
+            class="w-full px-3 py-3 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-900 dark:text-white placeholder-gray-400 font-medium"
             required
           />
 
-          <!-- Clear Input Button -->
-          <button type="button" id="btn-clear-input" class="p-2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors hidden sm:block text-sm" title="Clear input">
+          <!-- Clear Button -->
+          <button 
+            type="button" 
+            id="clearBtn" 
+            class="hidden text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-2 text-sm"
+            aria-label="Clear input"
+          >
             ✕
           </button>
 
-          <!-- Primary Action Button -->
-          <button type="submit" id="scan-btn" class="shrink-0 bg-sentinel-crimson hover:bg-sentinel-crimson/90 text-white font-medium text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-md shadow-sentinel-crimson/25 transition-all flex items-center gap-2">
-            <span id="scan-btn-text">Run Pipeline</span>
-            <div id="scan-spinner" class="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin hidden"></div>
+          <!-- Primary Submit Button -->
+          <button 
+            type="submit" 
+            id="scanBtn" 
+            class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm sm:text-base shadow-md shadow-emerald-600/30 active:scale-95 transition flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            <span>Scan Profile</span>
+            <span class="text-sm">🔍</span>
           </button>
-        </div>
-      </form>
+        </form>
 
-      <!-- Quick Preset Test Pills -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mt-3.5 text-xs font-mono">
-        <span class="text-zinc-500 dark:text-zinc-400 text-[11px] mr-1">Quick Presets:</span>
-        <button onclick="loadPresetTarget('shadow_profile')" class="px-2.5 py-1 rounded-lg bg-white/80 dark:bg-obsidian-850 border border-paper-300 dark:border-obsidian-750 hover:border-sentinel-crimson text-zinc-700 dark:text-zinc-300 transition-all flex items-center gap-1.5 shadow-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-sentinel-crimson"></span>
-          <span>@ShadowProfile (Spambot · 89%)</span>
-        </button>
-        <button onclick="loadPresetTarget('elena_rostova')" class="px-2.5 py-1 rounded-lg bg-white/80 dark:bg-obsidian-850 border border-paper-300 dark:border-obsidian-750 hover:border-sentinel-emerald text-zinc-700 dark:text-zinc-300 transition-all flex items-center gap-1.5 shadow-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-sentinel-emerald"></span>
-          <span>@ElenaRostova (Verified · 12%)</span>
-        </button>
-        <button onclick="loadPresetTarget('viral_pulse')" class="px-2.5 py-1 rounded-lg bg-white/80 dark:bg-obsidian-850 border border-paper-300 dark:border-obsidian-750 hover:border-sentinel-amber text-zinc-700 dark:text-zinc-300 transition-all flex items-center gap-1.5 shadow-sm">
-          <span class="w-1.5 h-1.5 rounded-full bg-sentinel-amber"></span>
-          <span>@ViralPulse (Farm · 72%)</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Embedded macOS App Window: Notion Document Aesthetic -->
-  <main class="relative z-10 max-w-[1380px] w-full mx-auto my-4 px-2 sm:px-6">
-    <div class="bg-white/95 dark:bg-obsidian-900/95 backdrop-blur-2xl border border-paper-300 dark:border-obsidian-800 rounded-3xl shadow-2xl shadow-black/15 dark:shadow-black/60 overflow-hidden flex flex-col transition-colors duration-300">
-      
-      <!-- macOS Window Header Bar -->
-      <div class="px-5 py-3 border-b border-paper-200 dark:border-obsidian-800 flex items-center justify-between bg-paper-50/70 dark:bg-obsidian-950/40">
-        <!-- Window Traffic Light Dots -->
-        <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
-          <div class="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
-          <div class="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
-          <span class="ml-3 text-[11px] font-mono text-zinc-500 dark:text-zinc-400 hidden sm:inline">ProfileSentinel · Forensic Investigation Docket</span>
-        </div>
-
-        <!-- Window Center Title -->
-        <div class="text-xs font-mono font-medium text-zinc-700 dark:text-zinc-300 flex items-center gap-2">
-          <span id="window-status-dot" class="w-2 h-2 rounded-full bg-sentinel-crimson"></span>
-          <span id="window-target-label">Target: @ShadowProfile</span>
-        </div>
-
-        <!-- Window Right Actions -->
-        <div class="flex items-center gap-2 text-xs">
-          <span class="text-[11px] font-mono text-zinc-400 hidden md:inline">Hash: SHA-256</span>
-          <button onclick="copyAuditHash()" class="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1" title="Copy Docket SHA256 Signature">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- App Interior: Left Navigation Rail + Main Investigation Content -->
-      <div class="flex flex-col md:flex-row flex-1">
-        
-        <!-- Left Icon Navigation Rail -->
-        <aside class="w-full md:w-20 md:min-w-[76px] bg-paper-50/50 dark:bg-obsidian-950/30 border-b md:border-b-0 md:border-r border-paper-200 dark:border-obsidian-800 flex md:flex-col items-center justify-between p-3 z-10">
-          <div class="flex md:flex-col items-center gap-2 md:gap-4 w-full">
-            <!-- Brand Glyph with pulse -->
-            <div class="w-10 h-10 rounded-xl bg-sentinel-crimson/10 dark:bg-sentinel-crimson/20 border border-sentinel-crimson/30 flex items-center justify-center text-sentinel-crimson mb-0 md:mb-2 relative group">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span class="absolute left-16 bg-zinc-900 text-white text-[11px] font-mono px-2 py-1 rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap hidden md:block">Sentinel Eye</span>
-            </div>
-
-            <!-- Home Tab -->
-            <button class="relative w-11 h-11 rounded-xl flex items-center justify-center text-sentinel-crimson dark:text-sentinel-crimson bg-sentinel-crimson/10 transition-all group">
-              <div class="hidden md:block absolute -left-3 w-1 h-5 rounded-r bg-sentinel-crimson"></div>
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-              </svg>
-            </button>
-
-            <!-- Search Tab -->
-            <button onclick="document.getElementById('url-input').focus()" class="w-11 h-11 rounded-xl flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-paper-200 dark:hover:bg-obsidian-800 transition-all">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-            </button>
-
-            <!-- Logs Tab -->
-            <button onclick="scrollToSection('architecture-section')" class="w-11 h-11 rounded-xl flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-paper-200 dark:hover:bg-obsidian-800 transition-all">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
-
-            <!-- Models Benchmark Tab -->
-            <button onclick="scrollToSection('benchmark-section')" class="w-11 h-11 rounded-xl flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-paper-200 dark:hover:bg-obsidian-800 transition-all">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Bottom Config -->
-          <button onclick="toggleTokens()" class="w-11 h-11 rounded-xl flex items-center justify-center text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-paper-200 dark:hover:bg-obsidian-800 transition-all">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </button>
-        </aside>
-
-        <!-- Main Investigation Content Stage -->
-        <div class="flex-1 p-4 md:p-8 space-y-6 overflow-hidden">
+        <!-- Quick One-Click Presets for Easy Demo Testing -->
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span class="text-gray-500 dark:text-gray-400 font-medium mr-1">Quick Test:</span>
           
-          <!-- Section 1: Profile Identity Hero Card + Analysis Summary & Forensics Card -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          <button type="button" class="preset-btn px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition flex items-center gap-1.5" data-url="https://instagram.com/cristiano">
+            <img src="/static/assets/instagram.png" alt="IG" class="w-3.5 h-3.5 object-contain inline-block">
+            <span>@cristiano (Real)</span>
+          </button>
+
+          <button type="button" class="preset-btn px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition flex items-center gap-1.5" data-url="https://x.com/elonmusk">
+            <img src="/static/assets/x.svg" alt="X" class="w-3 h-3 object-contain inline-block">
+            <span>@elonmusk (Real)</span>
+          </button>
+
+          <button type="button" class="preset-btn px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition flex items-center gap-1.5" data-url="https://facebook.com/zuck">
+            <img src="/static/assets/facebook.png" alt="FB" class="w-3.5 h-3.5 object-contain inline-block">
+            <span>fb.com/zuck (Real)</span>
+          </button>
+
+          <button type="button" class="preset-btn px-2.5 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-700 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition flex items-center gap-1.5" data-url="https://x.com/ShadowProfile">
+            <img src="/static/assets/x.svg" alt="X" class="w-3 h-3 object-contain inline-block">
+            <span>@ShadowProfile (Bot)</span>
+          </button>
+
+          <button type="button" class="preset-btn px-2.5 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-700 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition flex items-center gap-1.5" data-url="https://instagram.com/smpni6240">
+            <img src="/static/assets/instagram.png" alt="IG" class="w-3.5 h-3.5 object-contain inline-block">
+            <span>@smpni6240 (Bot)</span>
+          </button>
+
+          <button type="button" class="preset-btn px-2.5 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-700 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition flex items-center gap-1.5" data-url="https://facebook.com/bot_m9eto">
+            <img src="/static/assets/facebook.png" alt="FB" class="w-3.5 h-3.5 object-contain inline-block">
+            <span>fb.com/bot_m9eto (Bot)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Animated Scanning Radar & Progress State (Hidden by default) -->
+      <section id="scanningState" class="hidden w-full flex-col items-center justify-center py-10 px-4 rounded-2xl bg-white dark:bg-brand-cardDark border border-gray-200 dark:border-brand-borderDark shadow-sm">
+        
+        <!-- Radar Pulse Graphic -->
+        <div class="relative w-24 h-24 mb-6 flex items-center justify-center">
+          <div class="absolute inset-0 rounded-full border-2 border-emerald-500/30 animate-ping"></div>
+          <div class="absolute inset-2 rounded-full border-2 border-emerald-500/50 animate-pulse"></div>
+          <div class="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500 flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/20">
+            📡
+          </div>
+        </div>
+
+        <h3 id="scanStepTitle" class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+          Fetching Live Profile...
+        </h3>
+        <p id="scanStepDetail" class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 text-center max-w-md">
+          Connecting to public social media network and retrieving profile metadata...
+        </p>
+
+        <!-- Progress Bar -->
+        <div class="w-full max-w-xs mt-5 bg-gray-200 dark:bg-gray-800 h-2 rounded-full overflow-hidden">
+          <div id="scanProgressBar" class="h-full bg-emerald-500 transition-all duration-300 w-1/4"></div>
+        </div>
+
+        <!-- 4 Step Checklist -->
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs w-full max-w-lg">
+          <div id="step1" class="flex items-center gap-1.5 text-emerald-500 font-semibold">
+            <span>✓</span> <span>Connect</span>
+          </div>
+          <div id="step2" class="flex items-center gap-1.5 text-gray-400 font-medium">
+            <span>○</span> <span>Extract Bio</span>
+          </div>
+          <div id="step3" class="flex items-center gap-1.5 text-gray-400 font-medium">
+            <span>○</span> <span>AI Evaluation</span>
+          </div>
+          <div id="step4" class="flex items-center gap-1.5 text-gray-400 font-medium">
+            <span>○</span> <span>Trust Report</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Result Card (Populated after scanning) -->
+      <section id="resultCard" class="w-full flex flex-col gap-6">
+
+        <!-- Top Profile Snapshot Card -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-brand-cardDark border border-gray-200 dark:border-brand-borderDark shadow-md">
+          
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
             
-            <!-- Profile Identity Hero Card -->
-            <div class="lg:col-span-7 bg-paper-50 dark:bg-obsidian-850 border border-paper-200 dark:border-obsidian-800 rounded-2xl p-6 relative overflow-hidden transition-all duration-300">
-              <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-                
-                <!-- Avatar with Calibrated Risk Ring & Status Badge -->
-                <div class="relative group shrink-0">
-                  <div id="profile-avatar-ring" class="w-24 h-24 rounded-full p-1 border-2 border-sentinel-crimson shadow-xl shadow-red-500/10 transition-all duration-300">
-                    <img id="profile-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Analyzed Target Avatar" class="w-full h-full rounded-full object-cover grayscale contrast-125 dark:brightness-90 transition-all" />
-                  </div>
-                  <span id="profile-risk-badge" class="absolute -bottom-1.5 -right-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider bg-sentinel-crimson text-white shadow-md">
-                    Suspicious
-                  </span>
-                </div>
-
-                <!-- Profile Identity & Inferred Metadata -->
-                <div class="flex-1 text-center sm:text-left space-y-2">
-                  <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-                    <h3 id="profile-name" class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Shadow Profile</h3>
-                    <span id="profile-handle" class="text-xs font-mono px-2 py-0.5 rounded bg-paper-200 dark:bg-obsidian-750 text-zinc-700 dark:text-zinc-300">@ShadowProfile</span>
-                    <span id="profile-platform-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-paper-200 dark:bg-obsidian-750 text-zinc-500 flex items-center gap-1">
-                      <span id="target-platform-icon">𝕏</span> X (Twitter)
-                    </span>
-                  </div>
-
-                  <!-- Timezone & Cadence Desync indicator -->
-                  <div class="flex items-center justify-center sm:justify-start gap-2 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
-                    <svg class="w-3.5 h-3.5 text-sentinel-amber shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span id="profile-timezone">Inferred Offset: UTC-05:00 vs Actual UTC+03:00 (Moscow)</span>
-                  </div>
-
-                  <!-- Three Minimal Stat Pills -->
-                  <div class="grid grid-cols-3 gap-3 pt-2">
-                    <div class="p-2.5 rounded-xl bg-white dark:bg-obsidian-900 border border-paper-200 dark:border-obsidian-750 text-center shadow-sm">
-                      <div id="stat-posts-val" class="text-lg font-mono font-bold text-zinc-900 dark:text-zinc-100">23%</div>
-                      <div class="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Post Ratio</div>
-                    </div>
-                    <div class="p-2.5 rounded-xl bg-white dark:bg-obsidian-900 border border-paper-200 dark:border-obsidian-750 text-center shadow-sm">
-                      <div id="stat-followers-val" class="text-lg font-mono font-bold text-zinc-900 dark:text-zinc-100">2</div>
-                      <div class="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Followers</div>
-                    </div>
-                    <div class="p-2.5 rounded-xl bg-white dark:bg-obsidian-900 border border-paper-200 dark:border-obsidian-750 text-center shadow-sm">
-                      <div id="stat-following-val" class="text-lg font-mono font-bold text-zinc-900 dark:text-zinc-100">1,240</div>
-                      <div class="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Following</div>
-                    </div>
-                  </div>
-                </div>
-
+            <!-- Avatar with Dynamic Risk Ring -->
+            <div class="relative shrink-0">
+              <img 
+                id="profileAvatar" 
+                src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=240&auto=format&fit=crop&q=80" 
+                alt="Profile Avatar" 
+                class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-emerald-500 shadow-md"
+              >
+              <div id="verifiedBadge" class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-sky-500 text-white flex items-center justify-center text-xs shadow-sm" title="Verified Account">
+                ✓
               </div>
             </div>
 
-            <!-- Analysis Summary & Forensics Card -->
-            <div class="lg:col-span-5 bg-paper-50 dark:bg-obsidian-850 border border-paper-200 dark:border-obsidian-800 rounded-2xl p-6 flex flex-col justify-between space-y-4">
-              <div class="flex items-center justify-between pb-2 border-b border-paper-200 dark:border-obsidian-800">
-                <h4 class="text-xs font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-400">Analysis Summary & Forensics</h4>
-                <span id="pipeline-status-badge" class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium">Pipeline Synced</span>
+            <!-- Profile Info & Bio -->
+            <div class="flex-1 text-center sm:text-left">
+              <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <h3 id="profileName" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                  Cristiano Ronaldo
+                </h3>
+                <span id="platformChip" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
+                  <img id="platformIconImg" src="/static/assets/instagram.png" alt="Platform" class="w-3.5 h-3.5 object-contain inline-block">
+                  <span id="platformName">Instagram</span>
+                </span>
               </div>
 
-              <div class="space-y-3">
-                <!-- Burst Interval Audit Trail -->
-                <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white dark:bg-obsidian-900 border border-paper-200 dark:border-obsidian-750 shadow-sm">
-                  <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-sentinel-amber/10 text-sentinel-amber flex items-center justify-center text-xs font-mono">⏱</div>
-                    <div>
-                      <div class="font-medium text-zinc-800 dark:text-zinc-200">Last Active Temporal Burst</div>
-                      <div id="burst-interval-text" class="text-[10px] text-zinc-400 font-mono">3 hours ago • Unnatural 140s automated burst</div>
-                    </div>
-                  </div>
-                  <button onclick="copyAuditHash()" class="p-1.5 hover:bg-paper-200 dark:hover:bg-obsidian-700 rounded text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors" title="Copy Signature">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                  </button>
-                </div>
+              <p id="profileHandle" class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">
+                @cristiano
+              </p>
 
-                <!-- Biometric / GAN Artifact Check -->
-                <div class="flex items-center justify-between text-xs p-2.5 rounded-xl bg-white dark:bg-obsidian-900 border border-paper-200 dark:border-obsidian-750 shadow-sm">
-                  <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-lg bg-sentinel-crimson/10 text-sentinel-crimson flex items-center justify-center text-xs font-mono">🎭</div>
-                    <div>
-                      <div class="font-medium text-zinc-800 dark:text-zinc-200">Biometric Facial Authenticity</div>
-                      <div id="biometric-score-text" class="text-[10px] text-zinc-400 font-mono">GAN StyleGAN2 pupil alignment: 91% (Flagged)</div>
-                    </div>
-                  </div>
-                  <span id="biometric-flag-pill" class="text-[10px] font-mono text-sentinel-crimson font-medium bg-sentinel-crimson/10 px-2 py-0.5 rounded">Flagged</span>
-                </div>
-              </div>
-
-              <!-- One-Click Forensics Actions -->
-              <div class="flex items-center gap-3 pt-2">
-                <button onclick="anonymizeProfile()" class="flex-1 py-2 px-3 rounded-xl border border-paper-300 dark:border-obsidian-700 bg-white dark:bg-obsidian-900 hover:bg-paper-100 dark:hover:bg-obsidian-800 text-xs font-mono text-zinc-700 dark:text-zinc-300 transition-all text-center">
-                  Anonymize Profile (GDPR-safe)
-                </button>
-                <button onclick="shareDocketModal()" class="flex-1 py-2 px-3 rounded-xl bg-sentinel-crimson hover:bg-sentinel-crimson/90 text-white text-xs font-mono font-medium shadow-md shadow-sentinel-crimson/20 transition-all text-center">
-                  Share Full Forensic Report
-                </button>
+              <!-- Bio Box -->
+              <div class="mt-3 p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/60 text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed italic">
+                <span id="profileBio">"SIUUU ⚽ Portuguese Football Player | Al Nassr FC & Portugal National Team"</span>
               </div>
             </div>
-
           </div>
 
-          <!-- Section 2: Continuous Circadian Cadence Spline Curve (No Discrete Bars) -->
-          <div class="bg-paper-50 dark:bg-obsidian-850 border border-paper-200 dark:border-obsidian-800 rounded-2xl p-6 space-y-4">
-            
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                    Continuous Circadian Activity Curve
-                  </h4>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-paper-200 dark:bg-obsidian-750 text-zinc-600 dark:text-zinc-300">
-                    Cubic Spline (Bézier $C^1$)
-                  </span>
-                </div>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  Mathematical continuous curve comparing observed posting rate vs normative human sleep-attenuation.
-                </p>
-              </div>
-
-              <!-- Curve Switcher: 24H vs 7D -->
-              <div class="inline-flex rounded-xl bg-paper-200 dark:bg-obsidian-800 p-1 text-[11px] font-mono self-start sm:self-auto">
-                <button onclick="setCurveRange('24h')" id="btn-curve-24h" class="px-3 py-1 rounded-lg bg-white dark:bg-obsidian-900 shadow-sm text-zinc-900 dark:text-zinc-100 font-semibold transition-all">
-                  24-Hour Circadian
-                </button>
-                <button onclick="setCurveRange('7d')" id="btn-curve-7d" class="px-3 py-1 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-all">
-                  7-Day Macro Wave
-                </button>
-              </div>
+          <!-- Key Stats Counters (Followers, Following, Posts) -->
+          <div class="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/40">
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Followers</p>
+              <p id="statFollowers" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-0.5">635M</p>
             </div>
-
-            <!-- SVG Continuous Spline Canvas -->
-            <div class="relative w-full h-64 bg-white dark:bg-obsidian-900 border border-paper-200 dark:border-obsidian-750 rounded-2xl p-4 overflow-hidden select-none">
-              
-              <!-- Subtle Background Grid Guide Lines -->
-              <div class="absolute inset-0 grid grid-rows-4 pointer-events-none opacity-20">
-                <div class="border-b border-dashed border-zinc-400 dark:border-zinc-600"></div>
-                <div class="border-b border-dashed border-zinc-400 dark:border-zinc-600"></div>
-                <div class="border-b border-dashed border-zinc-400 dark:border-zinc-600"></div>
-                <div></div>
-              </div>
-
-              <!-- SVG Spline Elements -->
-              <svg id="activity-svg" class="w-full h-full overflow-visible relative z-10" viewBox="0 0 1000 200" preserveAspectRatio="none">
-                <defs>
-                  <!-- Gradient for Crimson Threat Wave -->
-                  <linearGradient id="curve-gradient-red" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#E13D45" stop-opacity="0.45" />
-                    <stop offset="70%" stop-color="#E13D45" stop-opacity="0.08" />
-                    <stop offset="100%" stop-color="#E13D45" stop-opacity="0.0" />
-                  </linearGradient>
-
-                  <!-- Gradient for Emerald Human Baseline -->
-                  <linearGradient id="curve-gradient-emerald" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#10B981" stop-opacity="0.25" />
-                    <stop offset="100%" stop-color="#10B981" stop-opacity="0.0" />
-                  </linearGradient>
-
-                  <!-- Gradient for Amber Astroturf -->
-                  <linearGradient id="curve-gradient-amber" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#E58E26" stop-opacity="0.35" />
-                    <stop offset="100%" stop-color="#E58E26" stop-opacity="0.0" />
-                  </linearGradient>
-
-                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3.5" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-
-                <!-- Human Normative Reference Curve (Dashed Emerald Baseline) -->
-                <path id="baseline-area" class="curve-area" fill="url(#curve-gradient-emerald)" opacity="0.35" d=""></path>
-                <path id="baseline-path" class="curve-path" fill="none" stroke="#10B981" stroke-width="1.8" stroke-dasharray="5 4" opacity="0.65" d=""></path>
-
-                <!-- Target Profile Continuous Bézier Area & Stroke -->
-                <path id="target-area" class="curve-area" fill="url(#curve-gradient-red)" d=""></path>
-                <path id="target-path" class="curve-path" fill="none" stroke="#E13D45" stroke-width="2.6" filter="url(#glow)" d=""></path>
-
-                <!-- Crosshair Hover Elements -->
-                <line id="crosshair-x" x1="0" y1="0" x2="0" y2="200" stroke="#E13D45" stroke-width="1.5" stroke-dasharray="3 3" class="opacity-0 transition-opacity pointer-events-none" />
-                <circle id="crosshair-dot" cx="0" cy="0" r="5" fill="#FFFFFF" stroke="#E13D45" stroke-width="3" class="opacity-0 transition-opacity pointer-events-none shadow-xl" />
-              </svg>
-
-              <!-- Floating Hover Telemetry Card -->
-              <div id="curve-tooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-150 bg-zinc-950/95 text-white border border-zinc-700/80 px-3.5 py-2 rounded-xl shadow-2xl backdrop-blur-md text-[11px] font-mono z-30 transform -translate-x-1/2 -translate-y-full mb-3">
-                <div id="tooltip-time" class="text-zinc-400 font-semibold mb-0.5">Timestamp: 04:00 UTC</div>
-                <div class="flex items-center gap-2">
-                  <span id="tooltip-dot" class="w-2 h-2 rounded-full bg-sentinel-crimson"></span>
-                  <span>Rate: <strong id="tooltip-rate" class="text-zinc-100">42 posts/hr</strong></span>
-                </div>
-                <div id="tooltip-status" class="text-[10px] text-red-400 font-mono mt-0.5">Z-Score: +3.2 (Anomalous Cron Firing)</div>
-              </div>
-
-              <!-- X-Axis Labels -->
-              <div id="x-axis-labels" class="absolute bottom-2 left-4 right-4 flex justify-between text-[10px] font-mono text-zinc-400 dark:text-zinc-500 pointer-events-none">
-                <span>00:00 (Sleep)</span>
-                <span>04:00</span>
-                <span>08:00 (Wake)</span>
-                <span>12:00</span>
-                <span>16:00</span>
-                <span>20:00</span>
-                <span>23:59</span>
-              </div>
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/40">
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Following</p>
+              <p id="statFollowing" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-0.5">574</p>
             </div>
-
-            <!-- Legend & Interactive Instructions -->
-            <div class="flex flex-wrap items-center justify-between text-xs pt-1 text-zinc-500 dark:text-zinc-400 font-mono">
-              <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                  <span id="legend-target-bar" class="w-3.5 h-1 bg-sentinel-crimson rounded-full"></span>
-                  <span class="text-zinc-800 dark:text-zinc-200">Observed Posting Density</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="w-3.5 h-1 border-b-2 border-dashed border-emerald-500"></span>
-                  <span>Normative Human Circadian Baseline</span>
-                </div>
-              </div>
-              <div class="text-[11px] text-zinc-400">
-                Hover anywhere over the spline curve to inspect exact velocity & Z-scores
-              </div>
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/40">
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Posts / Tweets</p>
+              <p id="statPosts" class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-0.5">3.7K</p>
             </div>
-
           </div>
 
-          <!-- Section 3: Forensic Diagnostic Checklist Rows -->
-          <div class="bg-paper-50 dark:bg-obsidian-850 border border-paper-200 dark:border-obsidian-800 rounded-2xl p-6 space-y-4">
-            <h4 class="text-xs font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-400">
-              Multi-Factor Forensic Diagnostics Checklist
+        </div>
+
+        <!-- Trust Score & Verdict Banner -->
+        <div id="verdictContainer" class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-brand-cardDark border border-gray-200 dark:border-brand-borderDark shadow-md flex flex-col md:flex-row items-center gap-8">
+          
+          <!-- Circular Trust Percentage Meter -->
+          <div class="relative w-44 h-44 shrink-0 flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+              <!-- Background Circle -->
+              <circle 
+                cx="60" cy="60" r="50" 
+                class="text-gray-200 dark:text-gray-800" 
+                stroke-width="10" 
+                stroke="currentColor" 
+                fill="transparent" 
+              />
+              <!-- Animated Progress Circle -->
+              <circle 
+                id="gaugeProgressCircle"
+                cx="60" cy="60" r="50" 
+                stroke="#10B981" 
+                stroke-width="10" 
+                stroke-linecap="round"
+                stroke="currentColor" 
+                fill="transparent" 
+                stroke-dasharray="314.159"
+                stroke-dashoffset="12.56"
+                class="transition-all duration-1000 ease-out"
+              />
+            </svg>
+            
+            <!-- Meter Center Text -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span id="meterScore" class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">96%</span>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Trust Score</span>
+            </div>
+          </div>
+
+          <!-- Plain-English Verdict Description -->
+          <div class="flex-1 text-center md:text-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2" id="verdictPill">
+              <span id="verdictDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span id="verdictLabel">Real & Authentic Human</span>
+            </div>
+
+            <h4 id="verdictTitle" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white leading-snug">
+              This profile is safe and authentic
             </h4>
-            <div id="diagnostics-container" class="space-y-2">
-              <!-- Dynamically populated via JS -->
+
+            <p id="verdictDesc" class="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              All behavioral checks match real human usage. There is no evidence of bot activity, spam links, or automated manipulation.
+            </p>
+
+            <div class="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-gray-500 dark:text-gray-400 font-medium">
+              <span class="flex items-center gap-1">🔒 Safe to follow & message</span>
+              <span class="flex items-center gap-1">⚡ Verified with 21 AI features</span>
             </div>
           </div>
 
         </div>
 
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Section 4: Pipeline Architecture & Benchmark Showcase (On Scroll Down) -->
-  <section id="architecture-section" class="relative z-10 max-w-[1380px] w-full mx-auto my-12 px-4 sm:px-6 space-y-8">
-    
-    <div class="text-center max-w-2xl mx-auto space-y-2">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-paper-200 dark:bg-obsidian-850 border border-paper-300 dark:border-obsidian-750 text-[11px] font-mono text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
-        Architecture Deep-Dive
-      </div>
-      <h3 class="text-2xl sm:text-4xl font-normal tracking-tight text-zinc-900 dark:text-white">
-        4-Stage Ensemble ML Detection Pipeline
-      </h3>
-      <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-        From raw API behavioral telemetry to decorrelated probability consensus.
-      </p>
-    </div>
-
-    <!-- 4-Stage Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      
-      <!-- Stage 1 Card -->
-      <div class="bg-white/80 dark:bg-obsidian-900/80 backdrop-blur-md border border-paper-300 dark:border-obsidian-750 rounded-2xl p-5 flex flex-col justify-between hover:-translate-y-1 transition-all shadow-md">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-mono font-bold">
-              1
+        <!-- 5 Simple Factors ("Why This Score?") -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-white dark:bg-brand-cardDark border border-gray-200 dark:border-brand-borderDark shadow-md">
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <h4 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+                Why this profile received this score:
+              </h4>
+              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                Simple explanation of the 5 primary authenticity factors checked by the system.
+              </p>
             </div>
-            <span class="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-medium">Stage Active</span>
           </div>
-          <h4 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Metadata Normalization</h4>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Standard-scales 18 tabular behavioral indicators with non-parametric median imputation.
-          </p>
+
+          <!-- Factor Cards List -->
+          <div id="factorsList" class="flex flex-col gap-3">
+            <!-- Dynamically populated by JS -->
+          </div>
         </div>
 
-        <div class="h-10 my-3">
-          <svg class="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
-            <path d="M0,25 C20,28 35,5 50,8 C65,11 80,4 100,2" fill="none" stroke="#10B981" stroke-width="2"/>
-            <path d="M0,25 C20,28 35,5 50,8 C65,11 80,4 100,2 L100,30 L0,30 Z" fill="#10B981" fill-opacity="0.1"/>
-          </svg>
-        </div>
+        <!-- Technical Telemetry Collapsible (For examiners or curious users) -->
+        <div class="rounded-2xl border border-gray-200 dark:border-brand-borderDark bg-white dark:bg-brand-cardDark overflow-hidden">
+          <button 
+            type="button" 
+            id="toggleTechnicalBtn" 
+            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800/40 transition text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            <span class="flex items-center gap-2">
+              <span>🔬</span>
+              <span>Machine Learning & Technical Telemetry (Click to expand)</span>
+            </span>
+            <span id="techToggleIcon" class="text-xs">▼</span>
+          </button>
 
-        <div class="pt-2 border-t border-paper-200 dark:border-obsidian-800 text-[11px] font-mono text-zinc-400 flex justify-between">
-          <span>Latency: <strong>4.2ms</strong></span>
-          <span class="text-emerald-500">18 Features</span>
-        </div>
-      </div>
-
-      <!-- Stage 2 Card -->
-      <div class="bg-white/80 dark:bg-obsidian-900/80 backdrop-blur-md border border-paper-300 dark:border-obsidian-750 rounded-2xl p-5 flex flex-col justify-between hover:-translate-y-1 transition-all shadow-md">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="w-7 h-7 rounded-lg bg-sentinel-amber/10 text-sentinel-amber flex items-center justify-center text-xs font-mono font-bold">
-              2
+          <div id="technicalContent" class="hidden px-6 pb-6 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+              <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <span class="text-gray-500 dark:text-gray-400">ML Model:</span>
+                <p class="font-mono font-bold text-gray-900 dark:text-white mt-0.5">Random Forest (400 Trees)</p>
+              </div>
+              <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <span class="text-gray-500 dark:text-gray-400">Test Accuracy:</span>
+                <p class="font-mono font-bold text-emerald-500 mt-0.5">92.8% on held-out split</p>
+              </div>
+              <div class="p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                <span class="text-gray-500 dark:text-gray-400">ROC-AUC Discriminator:</span>
+                <p class="font-mono font-bold text-sky-500 mt-0.5">0.985</p>
+              </div>
             </div>
-            <span class="text-[10px] font-mono text-sentinel-amber bg-sentinel-amber/10 px-2 py-0.5 rounded-full font-medium">Cadence Spline</span>
-          </div>
-          <h4 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Temporal Entropy & Cadence</h4>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Calculates Shannon entropy across inter-arrival time $\Delta t$ distributions to spot cron intervals.
-          </p>
-        </div>
 
-        <div class="h-10 my-3">
-          <svg class="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
-            <path d="M0,15 C25,2 45,28 70,12 C85,2 95,8 100,7" fill="none" stroke="#E58E26" stroke-width="2"/>
-            <path d="M0,15 C25,2 45,28 70,12 C85,2 95,8 100,7 L100,30 L0,30 Z" fill="#E58E26" fill-opacity="0.1"/>
-          </svg>
-        </div>
-
-        <div class="pt-2 border-t border-paper-200 dark:border-obsidian-800 text-[11px] font-mono text-zinc-400 flex justify-between">
-          <span>Entropy: <strong>H = 1.42</strong></span>
-          <span class="text-amber-500">Poisson Check</span>
-        </div>
-      </div>
-
-      <!-- Stage 3 Card -->
-      <div class="bg-white/80 dark:bg-obsidian-900/80 backdrop-blur-md border border-paper-300 dark:border-obsidian-750 rounded-2xl p-5 flex flex-col justify-between hover:-translate-y-1 transition-all shadow-md">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-xs font-mono font-bold">
-              3
+            <p class="text-gray-500 dark:text-gray-400 mb-2 font-medium">Extracted 21-Dimensional Feature Vector:</p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left font-mono text-[11px] border border-gray-200 dark:border-gray-700 rounded-lg">
+                <thead class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                  <tr>
+                    <th class="p-2 border-b border-gray-200 dark:border-gray-700">Feature</th>
+                    <th class="p-2 border-b border-gray-200 dark:border-gray-700">Value</th>
+                    <th class="p-2 border-b border-gray-200 dark:border-gray-700">Interpretation</th>
+                  </tr>
+                </thead>
+                <tbody id="featuresTableBody" class="divide-y divide-gray-100 dark:divide-gray-800 text-gray-700 dark:text-gray-300">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
             </div>
-            <span class="text-[10px] font-mono text-indigo-500 bg-indigo-500/10 px-2 py-0.5 rounded-full font-medium">NLP Embeddings</span>
           </div>
-          <h4 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Lexical RoBERTa Transformer</h4>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Scans bios and captions for templated spambot phrasing, emoji spam, and semantic drift.
-          </p>
         </div>
 
-        <div class="h-10 my-3">
-          <svg class="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
-            <path d="M0,20 C30,5 50,25 70,10 C85,2 95,15 100,8" fill="none" stroke="#6366F1" stroke-width="2"/>
-            <path d="M0,20 C30,5 50,25 70,10 C85,2 95,15 100,8 L100,30 L0,30 Z" fill="#6366F1" fill-opacity="0.1"/>
-          </svg>
-        </div>
+      </section>
 
-        <div class="pt-2 border-t border-paper-200 dark:border-obsidian-800 text-[11px] font-mono text-zinc-400 flex justify-between">
-          <span>Cos Similarity: <strong>0.88</strong></span>
-          <span class="text-indigo-400">768 Dim</span>
-        </div>
+    </main>
+
+    <!-- Simple, Clean Footer -->
+    <footer class="border-t border-gray-200 dark:border-brand-borderDark py-6 bg-white dark:bg-brand-cardDark text-center text-xs text-gray-500 dark:text-gray-400">
+      <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p>ProfileTrust © 2026 — Capstone Research Project in Cybersecurity Intelligence</p>
+        <p class="flex items-center gap-1.5">
+          <span>🔒 100% Client-Safe Public Analysis</span>
+        </p>
       </div>
+    </footer>
 
-      <!-- Stage 4 Card -->
-      <div class="bg-white/80 dark:bg-obsidian-900/80 backdrop-blur-md border border-paper-300 dark:border-obsidian-750 rounded-2xl p-5 flex flex-col justify-between hover:-translate-y-1 transition-all shadow-md">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <div class="w-7 h-7 rounded-lg bg-sentinel-crimson/10 text-sentinel-crimson flex items-center justify-center text-xs font-mono font-bold">
-              4
-            </div>
-            <span class="text-[10px] font-mono text-sentinel-crimson bg-sentinel-crimson/10 px-2 py-0.5 rounded-full font-medium">Consensus</span>
-          </div>
-          <h4 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Ensemble XGBoost Consensus</h4>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Ensemble consensus combining Random Forest (400 trees) with gradient boosting for 0–1000 risk calibration.
-          </p>
-        </div>
-
-        <div class="h-10 my-3">
-          <svg class="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
-            <path d="M0,28 C20,24 40,26 60,10 C75,2 90,4 100,1" fill="none" stroke="#E13D45" stroke-width="2"/>
-            <path d="M0,28 C20,24 40,26 60,10 C75,2 90,4 100,1 L100,30 L0,30 Z" fill="#E13D45" fill-opacity="0.12"/>
-          </svg>
-        </div>
-
-        <div class="pt-2 border-t border-paper-200 dark:border-obsidian-800 text-[11px] font-mono text-zinc-400 flex justify-between">
-          <span>ROC-AUC: <strong>0.9853</strong></span>
-          <span class="text-red-400">Score 0–1000</span>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Academic Empirical Validation Benchmark Table -->
-    <div id="benchmark-section" class="bg-white/90 dark:bg-obsidian-900/90 backdrop-blur-md border border-paper-300 dark:border-obsidian-750 rounded-2xl p-6 space-y-4 shadow-xl">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div>
-          <h4 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-            Empirical Validation Benchmarks (Test Partition N=750 Profiles)
-          </h4>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400">
-            Evaluated on held-out multi-platform profiles across X, Instagram, and Facebook.
-          </p>
-        </div>
-        <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg self-start sm:self-auto">
-          State-of-the-Art Baseline: Random Forest Ensemble
-        </span>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs font-mono">
-          <thead>
-            <tr class="border-b border-paper-300 dark:border-obsidian-750 text-zinc-400 text-[11px]">
-              <th class="py-2.5 px-3">Classifier Architecture</th>
-              <th class="py-2.5 px-3">Accuracy</th>
-              <th class="py-2.5 px-3">Precision</th>
-              <th class="py-2.5 px-3">Recall</th>
-              <th class="py-2.5 px-3">F1-Score</th>
-              <th class="py-2.5 px-3">ROC-AUC</th>
-              <th class="py-2.5 px-3">Inference Latency</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-paper-200 dark:divide-obsidian-800 text-zinc-700 dark:text-zinc-300">
-            <tr class="bg-emerald-500/5 font-semibold text-emerald-600 dark:text-emerald-400">
-              <td class="py-3 px-3 flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Random Forest Ensemble (400 Estimators)</span>
-              </td>
-              <td class="py-3 px-3">92.80%</td>
-              <td class="py-3 px-3">90.11%</td>
-              <td class="py-3 px-3">89.43%</td>
-              <td class="py-3 px-3">89.77%</td>
-              <td class="py-3 px-3">0.9853</td>
-              <td class="py-3 px-3 text-zinc-500">4.2 ms</td>
-            </tr>
-            <tr>
-              <td class="py-2.5 px-3">XGBoost Gradient Boosted Trees</td>
-              <td class="py-2.5 px-3">91.45%</td>
-              <td class="py-2.5 px-3">88.90%</td>
-              <td class="py-2.5 px-3">88.10%</td>
-              <td class="py-2.5 px-3">88.50%</td>
-              <td class="py-2.5 px-3">0.9780</td>
-              <td class="py-2.5 px-3 text-zinc-500">3.8 ms</td>
-            </tr>
-            <tr>
-              <td class="py-2.5 px-3">Lexical RoBERTa (Frozen Embeddings)</td>
-              <td class="py-2.5 px-3">89.20%</td>
-              <td class="py-2.5 px-3">86.40%</td>
-              <td class="py-2.5 px-3">85.90%</td>
-              <td class="py-2.5 px-3">86.15%</td>
-              <td class="py-2.5 px-3">0.9610</td>
-              <td class="py-2.5 px-3 text-zinc-500">48.0 ms</td>
-            </tr>
-            <tr>
-              <td class="py-2.5 px-3">Multi-Layer Perceptron (MLP)</td>
-              <td class="py-2.5 px-3">87.60%</td>
-              <td class="py-2.5 px-3">84.10%</td>
-              <td class="py-2.5 px-3">83.50%</td>
-              <td class="py-2.5 px-3">83.80%</td>
-              <td class="py-2.5 px-3">0.9450</td>
-              <td class="py-2.5 px-3 text-zinc-500">6.1 ms</td>
-            </tr>
-            <tr class="text-zinc-400">
-              <td class="py-2.5 px-3">Logistic Regression Baseline</td>
-              <td class="py-2.5 px-3">78.40%</td>
-              <td class="py-2.5 px-3">74.20%</td>
-              <td class="py-2.5 px-3">72.80%</td>
-              <td class="py-2.5 px-3">73.50%</td>
-              <td class="py-2.5 px-3">0.8320</td>
-              <td class="py-2.5 px-3 text-zinc-500">0.8 ms</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- Interactive Design Token Inspector Drawer -->
-  <aside id="token-drawer" class="fixed inset-y-0 right-0 w-84 max-w-full bg-white dark:bg-obsidian-900 border-l border-paper-300 dark:border-obsidian-800 p-6 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 overflow-y-auto font-mono text-xs">
-    <div class="flex items-center justify-between pb-4 border-b border-paper-200 dark:border-obsidian-800 mb-4">
-      <h3 class="font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">Design System Specs</h3>
-      <button onclick="toggleTokens()" class="text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-100 text-base">✕</button>
-    </div>
-
-    <div class="space-y-6">
-      <div>
-        <h4 class="text-zinc-400 uppercase text-[10px] tracking-wider mb-2">Typography & Calligraphy</h4>
-        <div class="space-y-2 text-[11px]">
-          <div class="p-2.5 rounded-xl bg-paper-100 dark:bg-obsidian-800 border border-paper-200 dark:border-obsidian-700">
-            <span class="font-serif italic text-base block font-normal text-zinc-800 dark:text-zinc-200">Instrument Serif (Calligraphic)</span>
-            <span class="text-zinc-400 text-[10px]">Hero headlines, campaign italics, and forensic terms</span>
-          </div>
-          <div class="p-2.5 rounded-xl bg-paper-100 dark:bg-obsidian-800 border border-paper-200 dark:border-obsidian-700">
-            <span class="font-sans font-bold block text-zinc-800 dark:text-zinc-200">Plus Jakarta Sans</span>
-            <span class="text-zinc-400 text-[10px]">App UI, buttons, form controls, navigation</span>
-          </div>
-          <div class="p-2.5 rounded-xl bg-paper-100 dark:bg-obsidian-800 border border-paper-200 dark:border-obsidian-700">
-            <span class="font-mono block text-zinc-800 dark:text-zinc-200">JetBrains Mono</span>
-            <span class="text-zinc-400 text-[10px]">Telemetry stamps, post ratios, Z-scores</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 class="text-zinc-400 uppercase text-[10px] tracking-wider mb-2">Semantic Palette Tokens</h4>
-        <div class="space-y-2">
-          <div class="flex items-center justify-between p-2 rounded-lg bg-paper-100 dark:bg-obsidian-800 cursor-pointer hover:opacity-80" onclick="copyToken('#E13D45')">
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 rounded-full bg-[#E13D45]"></span>
-              <span>Crimson Sentinel (High Risk)</span>
-            </div>
-            <span class="text-zinc-400">#E13D45</span>
-          </div>
-          <div class="flex items-center justify-between p-2 rounded-lg bg-paper-100 dark:bg-obsidian-800 cursor-pointer hover:opacity-80" onclick="copyToken('#E58E26')">
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 rounded-full bg-[#E58E26]"></span>
-              <span>Amber Jitter (Suspicious)</span>
-            </div>
-            <span class="text-zinc-400">#E58E26</span>
-          </div>
-          <div class="flex items-center justify-between p-2 rounded-lg bg-paper-100 dark:bg-obsidian-800 cursor-pointer hover:opacity-80" onclick="copyToken('#10B981')">
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 rounded-full bg-[#10B981]"></span>
-              <span>Emerald Bio (Verified)</span>
-            </div>
-            <span class="text-zinc-400">#10B981</span>
-          </div>
-          <div class="flex items-center justify-between p-2 rounded-lg bg-paper-100 dark:bg-obsidian-800 cursor-pointer hover:opacity-80" onclick="copyToken('#04060F')">
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 rounded-full bg-[#04060F] border border-zinc-700"></span>
-              <span>Night Shift Midnight</span>
-            </div>
-            <span class="text-zinc-400">#04060F</span>
-          </div>
-          <div class="flex items-center justify-between p-2 rounded-lg bg-paper-100 dark:bg-obsidian-800 cursor-pointer hover:opacity-80" onclick="copyToken('#F9F8F6')">
-            <div class="flex items-center gap-2">
-              <span class="w-4 h-4 rounded-full bg-[#F9F8F6] border border-zinc-400"></span>
-              <span>Notion Paper Card</span>
-            </div>
-            <span class="text-zinc-400">#F9F8F6</span>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 class="text-zinc-400 uppercase text-[10px] tracking-wider mb-2">Cubic Bézier Mathematical Spline</h4>
-        <div class="p-2.5 rounded-xl bg-paper-100 dark:bg-obsidian-800 border border-paper-200 dark:border-obsidian-700 text-[10px] text-zinc-400 space-y-1">
-          <div>Formula: $P(t) = (1-t)^3 P_0 + 3(1-t)^2 t P_1 + 3(1-t)t^2 P_2 + t^3 P_3$</div>
-          <div>Continuous $C^1$ smooth derivative. Completely removes blocky bar artifacts.</div>
-        </div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Notification Toast -->
-  <div id="toast" class="fixed bottom-6 right-6 bg-zinc-950 text-white border border-zinc-700 px-4 py-2.5 rounded-xl shadow-2xl text-xs font-mono opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-    Notification toast
   </div>
-
-  <!-- Global Footer -->
-  <footer class="relative z-10 border-t border-paper-200 dark:border-obsidian-850 py-6 px-4 md:px-8 mt-12 bg-paper-50 dark:bg-obsidian-950/80">
-    <div class="max-w-[1380px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-zinc-800 dark:text-zinc-200">🛡️ ProfileSentinel</span>
-        <span>· Capstone Engineering Research Project</span>
-      </div>
-      <div>
-        Authors: Yash Mahato, Prashant Kumar Choudhary, Shubham Kumar, Ashutosh Kumar
-      </div>
-      <div class="flex items-center gap-4">
-        <a href="/docs" target="_blank" class="hover:text-sentinel-cyan transition-colors">FastAPI Docs ↗</a>
-        <a href="https://github.com/theyashmahato1851/BT152-fake-profile-detection-on-social-media" target="_blank" class="hover:text-sentinel-cyan transition-colors">GitHub Repository ↗</a>
-      </div>
-    </div>
-  </footer>
 
   <script src="/static/app.js"></script>
 </body>
