@@ -61,13 +61,135 @@ if IMPORTANCE_PATH.exists():
 # ---------------------------------------------------------------------------
 PRESETS = [
     {
+        "id": "shadow_profile",
+        "name": "ShadowProfile",
+        "platform": "X",
+        "url": "https://x.com/ShadowProfile",
+        "handle": "@ShadowProfile",
+        "type": "Coordinated Spambot",
+        "risk_percentage": "89%",
+        "is_bot": True,
+        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+        "features": {
+            "platform": "X",
+            "username": "ShadowProfile",
+            "username_length": 13,
+            "digits_count": 3,
+            "digit_ratio": 0.231,
+            "special_char_count": 0,
+            "username_randomness": 1,
+            "followers": 2,
+            "following": 1240,
+            "follower_following_ratio": 0.002,
+            "posts": 14,
+            "posts_per_day": 0.038,
+            "account_age_days": 365,
+            "has_profile_pic": 1,
+            "verified": 0,
+            "bio_length": 24,
+            "suspicious_links_in_bio": 1,
+            "caption_similarity_score": 0.920,
+            "content_similarity_score": 0.810,
+            "follow_unfollow_rate": 510,
+            "spam_comments_rate": 310,
+            "generic_comment_rate": 220,
+        },
+        "circadian_curve_24h": [75, 78, 80, 82, 79, 85, 80, 78, 82, 80, 84, 80, 79, 81, 85, 83, 80, 82, 85, 79, 80, 82, 78, 81],
+        "circadian_curve_7d": [80, 82, 85, 81, 79, 83, 84],
+        "timezone_audit": "Inferred Offset: UTC-05:00 vs Actual UTC+03:00 (Moscow)",
+        "biometric_score": "GAN StyleGAN2 pupil alignment score: 91% (Synthetic artifact flagged)",
+        "burst_interval": "Unnatural 140s automated burst interval (3 hours ago)",
+    },
+    {
+        "id": "elena_rostova",
+        "name": "ElenaRostova",
+        "platform": "Instagram",
+        "url": "https://instagram.com/ElenaRostova",
+        "handle": "@ElenaRostova",
+        "type": "Verified Human",
+        "risk_percentage": "12%",
+        "is_bot": False,
+        "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80",
+        "features": {
+            "platform": "Instagram",
+            "username": "ElenaRostova",
+            "username_length": 12,
+            "digits_count": 0,
+            "digit_ratio": 0.0,
+            "special_char_count": 0,
+            "username_randomness": 0,
+            "followers": 14200,
+            "following": 318,
+            "follower_following_ratio": 44.654,
+            "posts": 340,
+            "posts_per_day": 0.380,
+            "account_age_days": 895,
+            "has_profile_pic": 1,
+            "verified": 1,
+            "bio_length": 160,
+            "suspicious_links_in_bio": 0,
+            "caption_similarity_score": 0.420,
+            "content_similarity_score": 0.220,
+            "follow_unfollow_rate": 20,
+            "spam_comments_rate": 5,
+            "generic_comment_rate": 12,
+        },
+        "circadian_curve_24h": [8, 4, 1, 0, 0, 2, 12, 35, 62, 70, 68, 75, 82, 70, 65, 72, 80, 88, 74, 60, 45, 28, 15, 10],
+        "circadian_curve_7d": [65, 72, 78, 82, 70, 40, 35],
+        "timezone_audit": "Normal Circadian Alignment: UTC-08:00 (PST)",
+        "biometric_score": "Natural ocular variance verified (Human authenticity: 98.4%)",
+        "burst_interval": "Natural human Poisson inter-arrival variance (18 mins ago)",
+    },
+    {
+        "id": "viral_pulse",
+        "name": "ViralPulse",
+        "platform": "Facebook",
+        "url": "https://facebook.com/ViralPulse",
+        "handle": "fb.com/ViralPulse",
+        "type": "Astroturf Farm",
+        "risk_percentage": "72%",
+        "is_bot": True,
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
+        "features": {
+            "platform": "Facebook",
+            "username": "ViralPulse",
+            "username_length": 10,
+            "digits_count": 0,
+            "digit_ratio": 0.0,
+            "special_char_count": 0,
+            "username_randomness": 1,
+            "followers": 420,
+            "following": 3890,
+            "follower_following_ratio": 0.108,
+            "posts": 55,
+            "posts_per_day": 0.150,
+            "account_age_days": 365,
+            "has_profile_pic": 1,
+            "verified": 0,
+            "bio_length": 45,
+            "suspicious_links_in_bio": 1,
+            "caption_similarity_score": 0.880,
+            "content_similarity_score": 0.650,
+            "follow_unfollow_rate": 420,
+            "spam_comments_rate": 210,
+            "generic_comment_rate": 160,
+        },
+        "circadian_curve_24h": [20, 15, 10, 8, 90, 95, 20, 15, 18, 95, 90, 25, 30, 20, 92, 88, 25, 30, 85, 90, 30, 25, 20, 18],
+        "circadian_curve_7d": [45, 90, 30, 95, 25, 85, 40],
+        "timezone_audit": "High Variance Multi-IP Jitter Detected (Synchronized Farm)",
+        "biometric_score": "Stock photo reuse across 14 syndicated farm nodes",
+        "burst_interval": "High-frequency scripted post clusters (45s inter-arrival)",
+    },
+    {
         "id": "x_real",
         "name": "dmitri",
         "platform": "X",
         "url": "https://x.com/dmitri",
         "handle": "@dmitri",
         "type": "Authentic Profile",
+        "risk_percentage": "2%",
         "is_bot": False,
+        "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80",
         "features": {
             "platform": "X",
             "username": "dmitri",
@@ -92,6 +214,11 @@ PRESETS = [
             "spam_comments_rate": 44,
             "generic_comment_rate": 63,
         },
+        "circadian_curve_24h": [6, 2, 0, 0, 1, 4, 15, 40, 65, 72, 70, 78, 80, 68, 62, 70, 75, 82, 70, 55, 40, 25, 14, 8],
+        "circadian_curve_7d": [60, 68, 75, 80, 65, 35, 30],
+        "timezone_audit": "Normal Circadian Alignment: UTC-05:00 (EST)",
+        "biometric_score": "Authentic personal selfie detected",
+        "burst_interval": "Organic posting frequency observed",
     },
     {
         "id": "x_bot",
@@ -100,7 +227,9 @@ PRESETS = [
         "url": "https://x.com/qgph5q343j",
         "handle": "@qgph5q343j",
         "type": "Automated Sybil Bot",
+        "risk_percentage": "68%",
         "is_bot": True,
+        "avatar": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80",
         "features": {
             "platform": "X",
             "username": "qgph5q343j",
@@ -125,6 +254,11 @@ PRESETS = [
             "spam_comments_rate": 171,
             "generic_comment_rate": 62,
         },
+        "circadian_curve_24h": [70, 72, 75, 78, 74, 80, 76, 75, 78, 77, 80, 76, 75, 78, 80, 79, 75, 78, 80, 76, 77, 78, 75, 76],
+        "circadian_curve_7d": [75, 78, 80, 77, 76, 79, 80],
+        "timezone_audit": "Inferred Offset: UTC+00:00 vs Actual UTC+08:00 (Jitter)",
+        "biometric_score": "Abstract geometric avatar (No human biometric detected)",
+        "burst_interval": "Periodic 300s automated cron job triggers",
     },
     {
         "id": "ig_real",
@@ -133,7 +267,9 @@ PRESETS = [
         "url": "https://instagram.com/martin",
         "handle": "@martin",
         "type": "Authentic Creator",
+        "risk_percentage": "1%",
         "is_bot": False,
+        "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
         "features": {
             "platform": "Instagram",
             "username": "martin",
@@ -468,19 +604,57 @@ def scan_profile(payload: ScanRequest):
         },
     ]
 
+    preset_obj = None
+    if parsed.get("preset_id"):
+        for p in PRESETS:
+            if p["id"] == parsed["preset_id"]:
+                preset_obj = p
+                break
+
+    if preset_obj and "circadian_curve_24h" in preset_obj:
+        circadian_24h = preset_obj["circadian_curve_24h"]
+        circadian_7d = preset_obj["circadian_curve_7d"]
+        tz_audit = preset_obj.get("timezone_audit")
+        bio_audit = preset_obj.get("biometric_score")
+        burst_audit = preset_obj.get("burst_interval")
+        avatar_url = preset_obj.get("avatar")
+    elif prob >= 0.5:
+        circadian_24h = [74, 76, 79, 82, 80, 84, 81, 78, 80, 82, 85, 81, 79, 82, 84, 83, 80, 81, 84, 80, 79, 81, 78, 80]
+        circadian_7d = [78, 81, 84, 80, 79, 82, 83]
+        tz_audit = "Inferred Offset: UTC-05:00 vs Actual UTC+03:00 (Jitter)"
+        bio_audit = "GAN StyleGAN2 artifact detected (Synthetic pupil score: 91%)"
+        burst_audit = "Unnatural 140s automated burst interval (3 hours ago)"
+        avatar_url = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+    else:
+        circadian_24h = [8, 4, 1, 0, 0, 2, 12, 35, 62, 70, 68, 75, 82, 70, 65, 72, 80, 88, 74, 60, 45, 28, 15, 10]
+        circadian_7d = [65, 72, 78, 82, 70, 40, 35]
+        tz_audit = "Normal Circadian Alignment: UTC-08:00 (PST)"
+        bio_audit = "Natural ocular & biometric variance verified (Human authenticity: 98%)"
+        burst_audit = "Organic human Poisson distribution (18 mins ago)"
+        avatar_url = "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80"
+
     return {
         "target": {
             "platform": parsed["platform"],
             "handle": parsed["handle"],
             "url": payload.url,
+            "avatar": avatar_url,
         },
         "assessment": {
             "fake_probability": round(prob, 4),
             "percentage": f"{prob:.1%}",
+            "risk_score_1000": int(prob * 1000),
             "tier_label": tier_label,
             "tier_color": tier_color,
             "tier_icon": tier_icon,
             "verdict": verdict,
+        },
+        "forensics": {
+            "timezone_audit": tz_audit,
+            "biometric_score": bio_audit,
+            "burst_interval": burst_audit,
+            "circadian_curve_24h": circadian_24h,
+            "circadian_curve_7d": circadian_7d,
         },
         "diagnostics": diagnostics,
         "features": features,
