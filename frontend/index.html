@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBER-RADAR | Universal Social Media Fake Profile Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Floating Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="brand-shield">🛡️</span>
+        <span class="brand-name">CYBER-RADAR</span>
+        <span class="brand-tag">v2.5 PRO</span>
+      </div>
+      <div class="nav-links">
+        <a href="#scanner" class="nav-link active">Scanner</a>
+        <a href="#presets" class="nav-link">Test Presets</a>
+        <a href="#telemetry" class="nav-link">Model Telemetry</a>
+        <a href="/docs" target="_blank" class="nav-link api-link">Swagger API ↗</a>
+      </div>
+      <div class="nav-status">
+        <span class="live-pulse"></span>
+        <span class="status-text">AI Engine Online (3,000 Profiles)</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero" id="scanner">
+    <div class="hero-container">
+      <div class="hero-badge">
+        <span class="sparkle">✨</span> MULTI-PLATFORM CYBER DEFENSE INTELLIGENCE
+      </div>
+      <h1 class="hero-headline">
+        Detect Fake & Sybil Profiles on <br>
+        <span class="gradient-text">X, Instagram & Facebook</span>
+      </h1>
+      <p class="hero-subtext">
+        Instant behavioral metadata classification trained on 3,000 authenticated multi-platform profiles.
+        Powered by a 400-estimator decorrelated Random Forest ensemble.
+      </p>
+
+      <!-- Platform Filter Pills -->
+      <div class="platform-chips">
+        <button class="chip chip-active" data-platform="ALL">🌐 All Platforms</button>
+        <button class="chip" data-platform="X">𝕏 X (Twitter)</button>
+        <button class="chip" data-platform="Instagram">📸 Instagram</button>
+        <button class="chip" data-platform="Facebook">📘 Facebook</button>
+      </div>
+
+      <!-- Main Search Bar -->
+      <form id="scan-form" class="search-form">
+        <div class="search-box">
+          <span class="search-icon" id="detected-icon">🔍</span>
+          <input 
+            type="text" 
+            id="url-input" 
+            placeholder="Paste profile URL or handle (e.g., https://x.com/elonmusk, https://instagram.com/cristiano, or @username)" 
+            autocomplete="off"
+            required
+          >
+          <button type="submit" class="scan-button" id="scan-btn">
+            <span class="btn-text">Execute AI Scan</span>
+            <span class="btn-spinner" id="btn-spinner"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </header>
+
+  <!-- Presets Strip -->
+  <section class="presets-section" id="presets">
+    <div class="section-container">
+      <div class="section-header">
+        <h3 class="section-title">⚡ Verified Dataset Test Profiles</h3>
+        <p class="section-desc">Click any real or fake profile directly from the dataset for an instant live viva demonstration:</p>
+      </div>
+      <div class="presets-grid" id="presets-container">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="results-section" id="results-section">
+    <div class="section-container">
+      
+      <!-- Target Summary Strip -->
+      <div class="target-strip" id="target-strip">
+        <div class="target-info">
+          <span class="target-icon" id="res-icon">𝕏</span>
+          <div>
+            <h4 class="target-handle" id="res-handle">@username</h4>
+            <span class="target-platform" id="res-platform">Platform: X (Twitter)</span>
+          </div>
+        </div>
+        <div class="target-stats" id="res-quick-stats">
+          <!-- Quick metrics -->
+        </div>
+      </div>
+
+      <!-- Main Grid Cards -->
+      <div class="results-grid">
+        
+        <!-- Left: Radial Speedometer Card -->
+        <div class="cyber-card gauge-card">
+          <div class="card-label">CALCULATED SYBIL THREAT PROBABILITY</div>
+          
+          <div class="svg-gauge-wrapper">
+            <svg class="radial-svg" viewBox="0 0 200 200">
+              <circle class="gauge-bg" cx="100" cy="100" r="80"></circle>
+              <circle class="gauge-progress" id="gauge-circle" cx="100" cy="100" r="80"></circle>
+            </svg>
+            <div class="gauge-center-content">
+              <div class="gauge-score" id="gauge-score">0.0%</div>
+              <div class="gauge-sub">Fake Score</div>
+            </div>
+          </div>
+
+          <div class="risk-pill-wrapper">
+            <span class="risk-badge" id="risk-badge">🟢 AUTHENTIC HUMAN PROFILE</span>
+          </div>
+          <div class="model-info">
+            Evaluated via <b>Random Forest (400 Trees)</b> with Median Non-Parametric Imputation.
+          </div>
+        </div>
+
+        <!-- Right: Diagnostic Checklist Card -->
+        <div class="cyber-card diagnostics-card">
+          <div class="card-label">MULTI-FACTOR FORENSIC DIAGNOSTICS</div>
+          <div class="diagnostics-list" id="diagnostics-list">
+            <!-- Diagnostic rows rendered via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Actionable Advisory Banner -->
+      <div class="advisory-box" id="advisory-box">
+        <!-- Injected dynamically -->
+      </div>
+
+      <!-- Advanced Metadata Inspector Drawer -->
+      <div class="inspector-drawer">
+        <button class="drawer-toggle" id="drawer-btn">
+          <span>⚙️ Advanced Metadata Inspector & Parameter Tuning</span>
+          <span class="drawer-arrow" id="drawer-arrow">▼</span>
+        </button>
+        <div class="drawer-content" id="drawer-content">
+          <p class="drawer-desc">Adjust any extracted feature below to re-evaluate the profile in real time:</p>
+          <div class="param-grid">
+            <div class="param-group">
+              <label>Followers Count</label>
+              <input type="number" id="param-followers" min="0">
+            </div>
+            <div class="param-group">
+              <label>Following Count</label>
+              <input type="number" id="param-following" min="0">
+            </div>
+            <div class="param-group">
+              <label>Posts Count</label>
+              <input type="number" id="param-posts" min="0">
+            </div>
+            <div class="param-group">
+              <label>Bio Length (Characters)</label>
+              <input type="number" id="param-bio" min="0">
+            </div>
+            <div class="param-group checkbox-group">
+              <label><input type="checkbox" id="param-pic"> Has Profile Picture</label>
+            </div>
+            <div class="param-group checkbox-group">
+              <label><input type="checkbox" id="param-verified"> Verified Badge</label>
+            </div>
+            <div class="param-group checkbox-group">
+              <label><input type="checkbox" id="param-suspicious"> Suspicious External Links</label>
+            </div>
+          </div>
+          <button class="btn-tune" id="btn-recalculate">🔄 Recalculate AI Score</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Model Telemetry & Benchmarks Section -->
+  <section class="telemetry-section" id="telemetry">
+    <div class="section-container">
+      <div class="section-header">
+        <div class="hero-badge">EMPIRICAL BENCHMARKS</div>
+        <h2 class="section-title">Model Telemetry & Cross-Platform Metrics</h2>
+        <p class="section-desc">Evaluated on a held-out test partition of 750 multi-platform accounts (Random Forest, 400 Estimators):</p>
+      </div>
+
+      <!-- Metric Stat Cards -->
+      <div class="metrics-cards-grid">
+        <div class="metric-card">
+          <div class="m-val" id="metric-acc">92.80%</div>
+          <div class="m-lbl">Overall Accuracy</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-val" id="metric-prec">90.11%</div>
+          <div class="m-lbl">Precision</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-val" id="metric-rec">89.43%</div>
+          <div class="m-lbl">Recall</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-val" id="metric-f1">89.77%</div>
+          <div class="m-lbl">F1-Score</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-val" id="metric-auc">0.9853</div>
+          <div class="m-lbl">ROC-AUC</div>
+        </div>
+      </div>
+
+      <!-- Platform Comparison & Feature Importance -->
+      <div class="telemetry-grid">
+        
+        <div class="cyber-card">
+          <h4 class="card-heading">🌐 Per-Platform Test Accuracy</h4>
+          <div class="platform-bars">
+            <div class="plat-bar-row">
+              <div class="plat-bar-lbl">Facebook (N=217)</div>
+              <div class="bar-track"><div class="bar-fill" style="width: 95.39%;"></div></div>
+              <div class="plat-bar-val">95.39%</div>
+            </div>
+            <div class="plat-bar-row">
+              <div class="plat-bar-lbl">Instagram (N=240)</div>
+              <div class="bar-track"><div class="bar-fill bar-ig" style="width: 93.33%;"></div></div>
+              <div class="plat-bar-val">93.33%</div>
+            </div>
+            <div class="plat-bar-row">
+              <div class="plat-bar-lbl">X / Twitter (N=223)</div>
+              <div class="bar-track"><div class="bar-fill bar-x" style="width: 91.03%;"></div></div>
+              <div class="plat-bar-val">91.03%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cyber-card">
+          <h4 class="card-heading">🏆 Top Gini Impurity Discriminators</h4>
+          <div class="feature-tags-list">
+            <div class="feat-pill"><span class="feat-name">username_length</span><span class="feat-imp">22.22%</span></div>
+            <div class="feat-pill"><span class="feat-name">digit_ratio</span><span class="feat-imp">19.74%</span></div>
+            <div class="feat-pill"><span class="feat-name">digits_count</span><span class="feat-imp">18.27%</span></div>
+            <div class="feat-pill"><span class="feat-name">special_char_count</span><span class="feat-imp">6.79%</span></div>
+            <div class="feat-pill"><span class="feat-name">caption_similarity</span><span class="feat-imp">2.74%</span></div>
+            <div class="feat-pill"><span class="feat-name">follow_unfollow_rate</span><span class="feat-imp">2.41%</span></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <span class="footer-logo">🛡️ CYBER-RADAR</span>
+        <p class="footer-text">
+          Department of Computer Science & Engineering · Capstone Engineering Project<br>
+          Authors: Yash Mahato, Prashant Kumar Choudhary, Shubham Kumar, Ashutosh Kumar
+        </p>
+      </div>
+      <div class="footer-right">
+        <a href="/docs" target="_blank" class="footer-link">Interactive Swagger Docs</a>
+        <a href="https://github.com/theyashmahato1851/BT152-fake-profile-detection-on-social-media" target="_blank" class="footer-link">GitHub Repository ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
