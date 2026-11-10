@@ -54,11 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function getPlatformEmoji(platform) {
+  function getPlatformIconHtml(platform, sizeClass = 'icon-preset') {
     const p = (platform || '').toLowerCase();
-    if (p.includes('instagram')) return '📸';
-    if (p.includes('facebook')) return '📘';
-    return '𝕏';
+    if (p.includes('instagram')) {
+      return `<img src="/static/assets/instagram.png" alt="Instagram" class="${sizeClass}" width="22" height="22">`;
+    } else if (p.includes('facebook')) {
+      return `<img src="/static/assets/facebook.png" alt="Facebook" class="${sizeClass}" width="22" height="22">`;
+    } else {
+      return `<span class="x-glyph" style="font-size: 18px;">𝕏</span>`;
+    }
   }
 
   function renderPresets(presets) {
@@ -70,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     filtered.forEach(p => {
       const card = document.createElement('div');
       card.className = 'preset-card';
-      const icon = getPlatformEmoji(p.platform);
+      const iconHtml = getPlatformIconHtml(p.platform, 'icon-preset');
       const badgeCls = p.is_bot ? 'badge-bot' : 'badge-real';
 
       card.innerHTML = `
         <div class="preset-left">
-          <span class="preset-icon">${icon}</span>
+          <span class="preset-icon">${iconHtml}</span>
           <div>
             <div class="preset-name">${p.name}</div>
             <div class="preset-platform">${p.platform} · ${p.handle}</div>
@@ -110,11 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateDetectedIcon(val) {
     const v = val.toLowerCase();
     if (v.includes('instagram.com') || v.includes('instagr.am')) {
-      detectedIcon.textContent = '📸';
+      detectedIcon.innerHTML = '<img src="/static/assets/instagram.png" alt="Instagram" class="icon-search" width="20" height="20">';
     } else if (v.includes('facebook.com') || v.includes('fb.com')) {
-      detectedIcon.textContent = '📘';
+      detectedIcon.innerHTML = '<img src="/static/assets/facebook.png" alt="Facebook" class="icon-search" width="20" height="20">';
     } else if (v.includes('x.com') || v.includes('twitter.com')) {
-      detectedIcon.textContent = '𝕏';
+      detectedIcon.innerHTML = '<span class="x-glyph" style="font-size: 18px;">𝕏</span>';
     } else {
       detectedIcon.textContent = '🔍';
     }
@@ -183,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentFeatures = { ...f };
 
     // Target summary
-    resIcon.textContent = getPlatformEmoji(t.platform);
+    resIcon.innerHTML = getPlatformIconHtml(t.platform, 'icon-target');
     resHandle.textContent = t.handle;
     resPlatform.textContent = `Platform: ${t.platform}`;
     resQuickStats.innerHTML = `
