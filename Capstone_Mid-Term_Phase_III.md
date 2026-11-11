@@ -3,20 +3,22 @@
 **Institution:** IILM University, Greater Noida  
 **Department:** Computer Science & Engineering (Final Year B.Tech)  
 **Academic Year:** 2026–2027  
-**Submission Form:** [Google Form for Phase III & Mid-Term](https://forms.gle/CoTnUDJneVhbFUqKA)  
-**Coordinator:** Dr. Vijaya Choudhary (<vijaya.choudhary@iilm.edu>)  
-**Project Title:** Universal AI-Driven Fake Profile & Coordinated Sybil Detection on Multi-Platform Social Media (X, Instagram, Facebook)  
-**Platform Domain:** Cybersecurity / Applied Machine Learning / Social Network Forensics  
+**Project Title:** Fake Profile Detection on Social Media Using Machine Learning & Behavioral Metadata Analysis  
+**Platform Domain:** AI/ML & Data Science (Public Cyber Safety & Digital Awareness Decision-Support Tool)  
 
 ---
 
-## Preliminary Details for Form Header
-- **Project Title:** Universal AI-Driven Fake Profile & Coordinated Sybil Detection on Multi-Platform Social Media
-- **Project ID:** *(Enter your assigned Capstone Group / Project ID, e.g., BT152 / CS-2026-XX)*
-- **Student Name & Roll Number:** Yash *(Enter your full name and university roll number)*
-- **Supervisor / Project Guide:** Dr. Vijaya Choudhary *(or your assigned faculty mentor)*
-- **Supervisor Email:** vijaya.choudhary@iilm.edu *(or mentor's official email)*
-- **Weekly Progress Reports (WPR) Status:** 3 WPRs submitted and reviewed by guide.
+## Capstone Project Credentials & Team Information
+
+- **Project Title:** Fake Profile Detection on Social Media Using Machine Learning & Behavioral Metadata Analysis
+- **Project ID:** BT152
+- **Team Members / Contributing Students:**
+  1. **Prasant Kumar Choudhary**
+  2. **Yash Mahato**
+  3. **Shubham Kumar**
+  4. **Ashutosh Kumar**
+- **Project Guide / Supervisor:** Ms. Shalini Singh
+- **Weekly Progress Reports (WPR) Status:** 3 WPRs submitted, verified, and reviewed by the project guide.
 
 ---
 

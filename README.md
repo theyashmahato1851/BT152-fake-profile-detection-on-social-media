@@ -1,4 +1,4 @@
-# ProfileTrust: Multi-Platform AI Behavioral Metadata Detection System for Social Media Impersonation & Sybil Profiles
+# Fake Profile Detection on Social Media Using Machine Learning & Behavioral Metadata Analysis
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -7,7 +7,25 @@
 [![ROC-AUC](https://img.shields.io/badge/ROC--AUC-0.9853-emerald.svg)](https://github.com/)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
-An end-to-end cybersecurity intelligence and forensic profile verification system designed to detect coordinated sybil bots, commercial spambots, and impersonation profiles across **X (Twitter)**, **Instagram**, and **Facebook**. 
+---
+
+### 🎓 Academic Capstone Project Details (BT152)
+
+- **Institution:** IILM University, Greater Noida
+- **Department:** Department of Computer Science & Engineering (B.Tech Final Year)
+- **Project ID:** `BT152`
+- **Domain:** AI/ML & Data Science (Public Cyber Safety & Digital Awareness Decision-Support Tool)
+- **Project Guide / Supervisor:** **Ms. Shalini Singh**
+- **Contributing Team Members:**
+  1. **Prasant Kumar Choudhary**
+  2. **Yash Mahato**
+  3. **Shubham Kumar**
+  4. **Ashutosh Kumar**
+- **Weekly Progress Reports (WPR):** 3 WPRs submitted, evaluated, and verified by the project guide.
+
+---
+
+An end-to-end AI/ML and data science decision-support tool designed for public cyber safety and digital awareness, detecting coordinated sybil bots, commercial spambots, and impersonation profiles across **X (Twitter)**, **Instagram**, and **Facebook**. 
 
 ProfileTrust integrates public metadata ingestion, 21-dimensional behavioral feature extraction, an ensemble machine learning pipeline (Random Forest with 400 estimators), and an accessible web application featuring a continuous trust percentage meter (0–100%) and plain-English safety factor diagnostics.
 
