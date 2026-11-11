@@ -76,7 +76,7 @@ The architecture follows a decoupled client-server pattern comprising an asynchr
                                     │ Raw Metadata Dictionary
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
-│               BEHAVIORAL FEATURE EXTRACTION (21 Dimensions)             │
+│               BEHAVIORAL FEATURE EXTRACTION (21 Dimensions)            │
 │  - Syntactic: username_length, digit_ratio, special_chars              │
 │  - Network: follower_following_ratio, followers, following             │
 │  - Temporal & Content: posts_per_day, caption_sim, spam_comment_rate   │
@@ -102,7 +102,7 @@ The architecture follows a decoupled client-server pattern comprising an asynchr
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        RESPONSIVE UI PRESENTATION                      │
 │  - Animated SVG Circular Speedometer (Count-up animation)              │
-│  - 3-Tier Status Banner (🟢 Authentic / 🟡 Caution / 🔴 Bot Alert)     │
+│  - 3-Tier Status Banner (🟢 Authentic / 🟡 Caution / 🔴 Bot Alert)    │
 │  - Micro-Sized Platform Badges (Strict 18px SVG/PNG Constraints)       │
 └────────────────────────────────────────────────────────────────────────┘
 ```
@@ -211,13 +211,13 @@ The web interface is engineered for clarity and universal accessibility across a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ 🛡️ ProfileTrust — Social Profile Authenticity Verifier                     │
+│ 🛡️ ProfileTrust — Social Profile Authenticity Verifier                      |
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  [ Paste Link: instagram.com/cristiano, @elonmusk, etc. ] [ Scan Profile 🔍] │
-│  Quick Test:  📸 @cristiano  𝕏 @elonmusk  📘 fb.com/zuck  🚨 @ShadowProfile │
+│  [Paste Link: instagram.com/cristiano, @elonmusk, etc. ] [ Scan Profile 🔍] │
+│  Quick Test:  📸 @cristiano  𝕏 @elonmusk  📘 fb.com/zuck 🚨 @ShadowProfile │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   [ 📸 Avatar ]  Cristiano Ronaldo  [ 📸 Instagram ]  [ ✓ Verified ]        │
+│   [ 📸 Avatar ]  Cristiano Ronaldo  [ 📸 Instagram ]  [ ✓ Verified ]       │
 │   @cristiano     "SIUUU ⚽ Portuguese Football Player | Al Nassr FC"        │
 │                                                                             │
 │   [ 635M Followers ]       [ 574 Following ]       [ 3.7K Posts ]           │
@@ -229,8 +229,8 @@ The web interface is engineered for clarity and universal accessibility across a
 │                                                                             │
 │   📋 Why this score? (Plain-English Checklist):                             │
 │   ✅ Profile Photo   — Authentic personal photo detected                    │
-│   ✅ Username        — Natural, readable human name without machine digits   │
-│   ✅ Follower Ratio  — Organic balance between followers and following     │
+│   ✅ Username        — Natural, readable human name without machine digits  │
+│   ✅ Follower Ratio  — Organic balance between followers and following      │
 │   ✅ Account Bio     — Genuine human description with no phishing links     │
 │   ✅ Timeline Posts  — Active posting history showing real human engagement │
 └─────────────────────────────────────────────────────────────────────────────┘
